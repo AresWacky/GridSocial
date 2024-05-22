@@ -11,10 +11,44 @@
         .social-icons {
             font-size: 24px;
         }
+
+        .text-darkgreen {
+            color: #143F46FF;
+        }
+
+        @keyframes scroll {
+            0% {background-position: 0 0;}
+            100% {background-position: 0 160px;} /* Adjust the scroll amount to match the cell size */
+        }
+
+        body {
+            background: linear-gradient(to right, rgb(43,28,47), rgb(20,63,70));
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 0; /* Set the z-index to 0 so it's behind the content */
+
+            /* Draw the grid using white lines */
+            background-size: 160px 160px; /* Increase the cell size */
+            background-image:
+                    linear-gradient(to right, #e5dac8 1px, transparent 1px),
+                    linear-gradient(to bottom, #e5dac8 1px, transparent 1px);
+
+            /* Animate the grid */
+            animation: scroll 10s linear infinite;
+            display: grid;
+            justify-content: center;
+        }
     </style>
 </head>
-<body class="gradient-custom"> <!-- Apply the gradient class to the body -->
-<!-- Header Section: Sign-in Link -->
+<body>
 <header class="text-end py-3 px-4">
     <a href="login.html" class="text-white-50 text-decoration-none">Already have an account?</a>
     <a href="login.html" class="text-white fw-bold">Sign in</a>
@@ -23,29 +57,27 @@
 
 <!-- Section: Design Block -->
 <section class="text-center mt-5">
-    <div class="card mx-4 mx-md-5 shadow-5-strong bg-dark text-white" style=" /* Add bg-dark and text-white classes */
-        margin-top: 100px;
-        backdrop-filter: blur(30px);
-        ">
-        <div class="card-body py-5 px-md-5">
+    <div class="card mx-4 mx-md-5 shadow-5-strong text-white" style="background-color: rgba(225,215,202,0.95)">
+        <div class="card-body py-5 px-md-5 ">
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-8">
-                    <h1 class="GridSocial fw-bold mb-5">GridSocial</h1> <!-- Corrected class name without dot -->
+                    <h1 class="fw-bold mb-5"
+                        style="color: #2A695E">GridSocial</h1>
 
-                    <h2 class="fw-bold mb-5">Sign up now!</h2>
+                    <h2 class="fw-bold mb-5 text-darkgreen">Sign up now!</h2>
                     <form>
                         <!-- 2 column grid layout with text inputs for the first and last names -->
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <div data-mdb-input-init class="form-outline">
                                     <input type="text" id="form3Example1" class="form-control" />
-                                    <label class="form-label" for="form3Example1">First name</label>
+                                    <label class="form-label text-darkgreen" for="form3Example1">First name</label>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">
                                 <div data-mdb-input-init class="form-outline">
                                     <input type="text" id="form3Example2" class="form-control" />
-                                    <label class="form-label" for="form3Example2">Last name</label>
+                                    <label class="form-label text-darkgreen" for="form3Example2">Last name</label>
                                 </div>
                             </div>
                         </div>
@@ -53,19 +85,19 @@
                         <!-- Email input -->
                         <div data-mdb-input-init class="form-outline mb-4">
                             <input type="email" id="form3Example3" class="form-control" />
-                            <label class="form-label" for="form3Example3">Email address</label>
+                            <label class="form-label text-darkgreen" for="form3Example3">Email address</label>
                         </div>
 
                         <!-- Password input -->
                         <div data-mdb-input-init class="form-outline mb-4">
                             <input type="password" id="form3Example4" class="form-control" />
-                            <label class="form-label" for="form3Example4">Password</label>
+                            <label class="form-label text-darkgreen" for="form3Example4">Password</label>
                         </div>
 
                         <!-- Checkbox -->
                         <div class="form-check d-flex justify-content-center mb-4">
                             <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33" checked />
-                            <label class="form-check-label" for="form2Example33">
+                            <label class="form-check-label text-darkgreen" for="form2Example33">
                                 Subscribe to our newsletter
                             </label>
                         </div>
@@ -76,12 +108,12 @@
                         </button>
 
                         <!-- Register buttons -->
-                        <div class="text-center">
+                        <div class="text-center text-darkgreen">
                             <p>or sign up with:</p>
-                            <a href="#!" class="text-white"><i class="fab fa-facebook-f social-icons mx-1"></i></a>
-                            <a href="#!" class="text-white"><i class="fab fa-google social-icons mx-1"></i></a>
-                            <a href="#!" class="text-white"><i class="fab fa-twitter social-icons mx-1"></i></a>
-                            <a href="#!" class="text-white"><i class="fab fa-github social-icons mx-1"></i></a>
+                            <a href="" class="text-darkgreen"><i class="fab fa-facebook-f social-icons mx-1"></i></a>
+                            <a href="" class="text-darkgreen"><i class="fab fa-google social-icons mx-1"></i></a>
+                            <a href="" class="text-darkgreen"><i class="fab fa-twitter social-icons mx-1"></i></a>
+                            <a href="" class="text-darkgreen"><i class="fab fa-github social-icons mx-1"></i></a>
                         </div>
                     </form>
                 </div>
