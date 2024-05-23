@@ -1,11 +1,16 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 @keyframes scroll {
-    0% {background-position: 0 0;}
-    100% {background-position: 0 160px;} /* Adjust the scroll amount to match the cell size */
+    0% { background-position: 0 0; }
+    100% { background-position: 0 160px; } /* Adjust the scroll amount to match the cell size */
 }
 
 body::before {
     content: "";
-    position: absolute;
+    position: fixed; /* Use fixed instead of absolute */
     top: 0;
     right: 0;
     bottom: 0;
@@ -16,12 +21,16 @@ body::before {
     background-size: 160px 160px; /* Increase the cell size */
     background-image:
             linear-gradient(to right, #fff 1px, transparent 1px),
-            linear-gradient(to bottom, #fff 1px, transparent 1px);
+            linear-gradient(to bottom, #fff 1px, transparent 5px);
 
     /* Animate the grid */
     animation: scroll 10s linear infinite;
-    display: grid;
-    justify-content: center;
+}
+
+/* Ensure content is above the grid */
+.container {
+    position: relative;
+    z-index: 1;
 }
 
 body {
