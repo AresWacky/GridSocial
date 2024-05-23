@@ -38,26 +38,34 @@
 
         .day-box {
             background-color: #c7c7c7;
-            border: 2px solid #9d9d9d;
+            border: 1px solid #9d9d9d;
             text-align: center;
             margin: 2px;
             transition: all 1s ease;
             overflow: hidden;
-
         }
 
         .day-box:hover {
             border-color: #212529;
+            overflow-y: auto;
         }
 
-        .rounded {
-            border-radius: 0px 0px 15px 15px;
-        }
 
         .current-week {
             height: 100vh;
             position: relative;
             z-index: 1;
+        }
+
+        .list-group-item {
+            height: 70px; /* Set the desired fixed height */
+            overflow: hidden; /* Prevent content overflow from changing the height */
+            text-overflow: ellipsis; /* Optional: handle overflowing text */
+            white-space: nowrap; /* Optional: prevent text from wrapping */
+        }
+
+        .day-box .list-group {
+            overflow-y: auto; /* Enable vertical scrolling */
         }
 
         .leftover-week {
@@ -75,6 +83,7 @@
             }
         }
 
+
         .expand-btn {
             position: absolute;
             bottom: 0;
@@ -86,10 +95,35 @@
             border-right: 10px solid transparent;
             border-top: 10px solid #212529;
             opacity: 0;
-            cursor: pointer;
             transition: opacity 0.3s ease;
+
         }
 
+
+        .card-body {
+            margin: 0;
+            padding: 0;
+            overflow-y: auto;
+            background-color: #ffffff;
+            padding-bottom: 22px;
+        }
+
+        .card-footer {
+            position: sticky;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            color: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            opacity: 0; /* Initially hidden */
+            transition: opacity 0.3s ease; /* Smooth transition for visibility */
+        }
+
+        .day-box:hover .card-footer {
+            opacity: 1; /* Show footer on hover */
+        }
         .card:hover .expand-btn {
             opacity: 1;
         }
@@ -123,115 +157,34 @@
             <div class="card-header">
                 Monday
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Vestibulum at eros</li>
+            <div class="card-body">
+            <ul class="list-group list-group-flush" id="mondayList">
+                <!-- List items will be added here dynamically -->
             </ul>
-            <div class="expand-btn" onclick="expandCard(this)"></div>
-        </div>
-        <div class="card day-box leftover-week rounded">Box 2</div>
-        <div class="card day-box leftover-week rounded">Box 3</div>
-    </div>
-    <!-- TUESDAY -->
-    <div class="column">
-        <div class="card day-box current-week">
-            <div class="card-header">
-                Tuesday
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
-            <div class="expand-btn" onclick="expandCard(this)"></div>
-        </div>
-        <div class="card day-box leftover-week rounded">Box 2</div>
-        <div class="card day-box leftover-week rounded">Box 3</div>
-    </div>
-    <!-- WEDNESDAY -->
-    <div class="column">
-        <div class="card day-box current-week">
-            <div class="card-header">
-                Wednesday
+            <div class="card-footer" onclick="expandCard(this)" style="cursor: pointer;">
+            <div class="expand-btn"></div>
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
-            <div class="expand-btn" onclick="expandCard(this)"></div>
-        </div>
-        <div class="card day-box leftover-week rounded">Box 2</div>
-        <div class="card day-box leftover-week rounded">Box 3</div>
-    </div>
-    <!-- THURSDAY -->
-    <div class="column">
-        <div class="card day-box current-week">
-            <div class="card-header">
-                Thursday
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
-            <div class="expand-btn" onclick="expandCard(this)"></div>
-        </div>
-        <div class="card day-box leftover-week rounded">Box 2</div>
-        <div class="card day-box leftover-week rounded">Box 3</div>
-    </div>
-    <!-- FRIDAY -->
-    <div class="column">
-        <div class="card day-box current-week">
-            <div class="card-header">
-                Friday
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
-            <div class="expand-btn" onclick="expandCard(this)"></div>
-        </div>
-        <div class="card day-box leftover-week rounded">Box 2</div>
-        <div class="card day-box leftover-week rounded">Box 3</div>
-    </div>
-    <!-- SATURDAY -->
-    <div class="column">
-        <div class="card day-box current-week">
-            <div class="card-header">
-                Saturday
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
-            <div class="expand-btn" onclick="expandCard(this)"></div>
-        </div>
-        <div class="card day-box leftover-week rounded">Box 2</div>
-        <div class="card day-box leftover-week rounded">Box 3</div>
-    </div>
-    <!-- SUNDAY -->
-    <div class="column">
-        <div class="card day-box current-week">
-            <div class="card-header">
-                Sunday
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
-            <div class="expand-btn" onclick="expandCard(this)"></div>
         </div>
         <div class="card day-box leftover-week rounded">Box 2</div>
         <div class="card day-box leftover-week rounded">Box 3</div>
     </div>
 </div>
 
+
 <script>
+    function createListItems(listId, numItems) {
+        const list = document.getElementById(listId);
+        for (let i = 0; i < numItems; i++) {
+            const listItem = document.createElement('li');
+            listItem.className = 'list-group-item';
+            list.appendChild(listItem);
+        }
+    }
+
+    // Call the function to create 7 list items for the Monday card
+    createListItems('mondayList', 24);
+
     function expandCard(button) {
         const currentCard = button.closest('.current-week');
         const isExpanded = currentCard.classList.contains('expanded');
@@ -245,6 +198,19 @@
         if (!isExpanded) {
             currentCard.classList.add('expanded');
         }
+    }
+
+    const firstColumn = document.querySelector('.column');
+
+    // Define an array of days of the week
+    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+    // Clone the first column 6 more times and adjust the day for each
+    for (let i = 1; i < 7; i++) { // Start from 1 because we already have one column
+        const clone = firstColumn.cloneNode(true); // true to clone all children as well
+        firstColumn.parentNode.appendChild(clone);
+        clone.querySelector('.card-header').textContent = daysOfWeek[i];
+        clone.querySelector('.list-group').id = `${daysOfWeek[i].toLowerCase()}List${i}`;
     }
 </script>
 </body>
