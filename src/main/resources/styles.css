@@ -1,2 +1,34 @@
+@keyframes scroll {
+    0% {background-position: 0 0;}
+    100% {background-position: 0 160px;} /* Adjust the scroll amount to match the cell size */
+}
 
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0; /* Set the z-index to 0 so it's behind the content */
 
+    /* Draw the grid using white lines */
+    background-size: 160px 160px; /* Increase the cell size */
+    background-image:
+            linear-gradient(to right, #fff 1px, transparent 1px),
+            linear-gradient(to bottom, #fff 1px, transparent 1px);
+
+    /* Animate the grid */
+    animation: scroll 10s linear infinite;
+    display: grid;
+    justify-content: center;
+}
+
+body {
+    background: linear-gradient(to right, rgb(43,28,47), rgb(20,63,70));
+    position: relative;
+}
+
+.text-darkgreen {
+    color: #143F46FF;
+}
