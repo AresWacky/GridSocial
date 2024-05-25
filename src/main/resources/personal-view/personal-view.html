@@ -8,14 +8,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="styles.css">
     <style>
-
-
-
         body {
             background-color: #ffffff;
-            height: calc(100vh - 56px) ;
+            height: calc(100vh - 56px);
             background: linear-gradient(to right, rgb(43,28,47), rgb(20,63,70));
-
+            overflow-x: hidden;
         }
 
         ::-webkit-scrollbar {
@@ -31,9 +28,20 @@
             background: #212529;
         }
 
+        .navbar {
+            box-shadow: 1px 6px 10px 4px rgba(0, 0, 0, 0.27);
+            z-index: 3;
+        }
+
+        .main-content {
+            display: flex;
+            overflow-x: auto;
+            height: calc(100vh - 56px);
+        }
+
         .column {
             position: relative;
-            height: calc(100vh - 56px); /* Subtract the height of the navbar */
+            height: calc(100vh - 56px);
             box-sizing: border-box;
             flex: 2 0 150px;
             display: flex;
@@ -41,41 +49,47 @@
         }
 
         .day-box {
-            background-color: #c7c7c7;
+            background-color: #808080;
             border: 1px solid #9d9d9d;
+            border-top: none; /* remove the top border */
             text-align: center;
-            margin: 2px;
-            transition: all 1s ease;
+            margin-left: 2px;
+            margin-right: 2px;
+            margin-bottom: 2px;
+            transition: all 0.5s ease;
             overflow: hidden;
+            border-top-left-radius: 0; /* no rounded edge on the top left corner */
+            border-top-right-radius: 0; /* no rounded edge on the top right corner */
+            box-shadow: 1px 4px 5px 4px rgba(0, 0, 0, 0.27);
         }
 
         .day-box:hover {
-            border-color: #212529;
+            border-color: #ffffff;
             overflow-y: auto;
         }
-
 
         .current-week {
             height: 100vh;
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .list-group-item {
-            height: 70px; /* Set the desired fixed height */
-            overflow: hidden; /* Prevent content overflow from changing the height */
-            text-overflow: ellipsis; /* Optional: handle overflowing text */
-            white-space: nowrap; /* Optional: prevent text from wrapping */
+            height: 70px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .day-box .list-group {
-            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-y: auto;
         }
 
         .leftover-week {
             height: 20vh;
             position: relative;
-            z-index: 0;
+            z-index: 1;
+            margin-top: -6px;
         }
 
         @media (max-height: 500px) {
@@ -86,7 +100,6 @@
                 display: none;
             }
         }
-
 
         .expand-btn {
             position: absolute;
@@ -100,80 +113,126 @@
             border-top: 10px solid #212529;
             opacity: 0;
             transition: opacity 0.3s ease;
-
         }
-
 
         .card-body {
             margin: 0;
-            overflow-y: auto;
             background-color: #ffffff;
             padding: 0;
             overflow-y: hidden;
         }
 
         .day-box:hover .card-body {
-            overflow-y: auto; /* Show scrollbar on hover */
+            overflow-y: auto;
         }
 
         .card-footer {
             position: sticky;
-            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
+            background-color: rgba(255, 255, 255, 0.5);
             color: white;
             bottom: 0;
             left: 0;
             right: 0;
             padding: 10px;
-            opacity: 0; /* Initially hidden */
-            transition: opacity 0.3s ease; /* Smooth transition for visibility */
+            opacity: 0;
+            transition: opacity 0.3s ease;
             cursor: pointer;
         }
 
         .day-box:hover .card-footer {
-            opacity: 1; /* Show footer on hover */
+            opacity: 1;
         }
         .card:hover .expand-btn {
             opacity: 1;
         }
 
         .expanded {
-            height: calc(100vh - 56px); /* Ensure the expanded card takes the full viewport height */
+            height: calc(100vh - 56px);
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1;
+            z-index: 2;
             transition: all 0s ease;
         }
+
+        /* Sidebar styles */
+        .sidebar {
+            position: fixed;
+            top: 56px; /* below navbar */
+            left: 0;
+            height: calc(100vh - 56px);
+            width: 0;
+            background-color: #343a40;
+            overflow: hidden;
+            z-index: 0;
+            display: none; /* Initially hidden */
+            transition: width 0.3s ease;
+        }
+
+        .sidebar .resize-handle {
+            width: 10px;
+            height: 100%;
+            background-color: #666;
+            cursor: ew-resize;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        /* Remove transition when resizing the sidebar */
+        .sidebar-resizing .sidebar{
+            transition: none;
+        }
+        .sidebar-resizing #mainContent {
+            transition: none;
+        }
+
+        .sidebar-open .sidebar {
+            width: 30vw; /* Initial width when sidebar is open */
+        }
+
+        #mainContent {
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+
+        .no-select {
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none;    /* Firefox */
+            -ms-user-select: none;     /* Internet Explorer/Edge */
+            user-select: none;         /* Non-prefixed version, currently supported by Chrome, Opera, and Firefox */
+        }
+
     </style>
 </head>
 
+<body>
 <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="bi bi-people-fill"></i>
+        <div>
+        <button class="navbar-toggler" type="button" id="toggleSidebar">
+            <i class="bi-people-fill"> Friends</i>
         </button>
-
-        <a class="navbar-brand ms-2" href="#">Feed</a>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Profile
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                    </ul>
-                </li>
-            </ul>
+            <button class="navbar-toggler" type="button" id="toggleFeed">
+                <i class="bi-rss-fill"> Feed</i>
+            </button>
         </div>
+        <a class="navbar-brand"><u>Personal View</u> <i class="bi-gear-fill"> </i></a>
+
+
+        <button class="navbar-toggler" type="button" href="#">
+            <i>Profile</i> <i class="bi-person-circle"></i>
+        </button>
     </div>
+
 </nav>
 
+<div id="sidebar" class="sidebar">
+    <div class="resize-handle"></div>
+    <!-- Sidebar content here -->
+</div>
 
-<body>
-<div class="container-fluid" style="display: flex; overflow-x: auto; height: 100vh">
+<div id="mainContent" class="container-fluid main-content">
     <!-- MONDAY -->
     <div class="column">
         <div class="card bg-dark text-white day-box current-week">
@@ -181,16 +240,16 @@
                 Monday
             </div>
             <div class="card-body">
-            <ul class="list-group list-group-flush list-group-item-dark" id="mondayList">
-                <!-- List items will be added here dynamically -->
-            </ul>
+                <ul class="list-group list-group-flush list-group-item-dark" id="mondayList">
+                    <!-- List items will be added here dynamically -->
+                </ul>
             </div>
             <div class="card-footer" onclick="expandCard(this)">
-            <div class="expand-btn text-white"></div>
+                <div class="expand-btn text-white"></div>
             </div>
         </div>
-        <div class="card bg-dark text-white day-box leftover-week rounded">Next Week</div>
-        <div class="card bg-dark text-white day-box leftover-week rounded">Next-Next Week</div>
+        <div class="card bg-dark text-white day-box leftover-week">Next Week</div>
+        <div class="card bg-dark text-white day-box leftover-week" style="z-index: 0">Next-Next Week</div>
     </div>
 </div>
 
@@ -204,36 +263,74 @@
         }
     }
 
-    // Call the function to create 7 list items for the Monday card
     createListItems('mondayList', 24);
 
     function expandCard(button) {
         const currentCard = button.closest('.current-week');
         const isExpanded = currentCard.classList.contains('expanded');
 
-        // Collapse any expanded card
         document.querySelectorAll('.current-week.expanded').forEach(card => {
             card.classList.remove('expanded');
         });
 
-        // Expand the clicked card if it wasn't already expanded
         if (!isExpanded) {
             currentCard.classList.add('expanded');
         }
     }
 
     const firstColumn = document.querySelector('.column');
-
-    // Define an array of days of the week
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-    // Clone the first column 6 more times and adjust the day for each
-    for (let i = 1; i < 7; i++) { // Start from 1 because we already have one column
-        const clone = firstColumn.cloneNode(true); // true to clone all children as well
+    for (let i = 1; i < 7; i++) {
+        const clone = firstColumn.cloneNode(true);
         firstColumn.parentNode.appendChild(clone);
         clone.querySelector('.card-header').textContent = daysOfWeek[i];
         clone.querySelector('.list-group').id = `${daysOfWeek[i].toLowerCase()}List${i}`;
     }
+
+    document.getElementById('toggleSidebar').addEventListener('click', function() {
+        document.body.classList.toggle('sidebar-open');
+        if (document.body.classList.contains('sidebar-open')) {
+            sidebar.style.display = 'block'; // Show the sidebar
+            sidebar.style.width = '30vw'; // Set initial width to 20% of the viewport width
+            mainContent.style.marginLeft = '30vw'; // Shift main content
+            mainContent.style.width = '70vw';
+        } else {
+            sidebar.style.display = 'none'; // Hide the sidebar
+            mainContent.style.marginLeft = '0'; // Reset main content position
+            mainContent.style.width = '100vw'; //Reset calendar width
+        }
+    });
+
+    let isResizing = false;
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const handle = document.querySelector('.resize-handle');
+
+    handle.addEventListener('mousedown', function(e) {
+        isResizing = true;
+        document.body.style.cursor = 'ew-resize';
+        document.body.classList.add('no-select');
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (!isResizing) return;
+        document.body.classList.add('sidebar-resizing');
+        let newWidth = e.clientX / window.innerWidth * 100;
+        if (newWidth < 30) newWidth = 30; // Minimum width is 30% of the viewport width
+        if (newWidth > 45) newWidth = 45; // Maximum width is 45% of the viewport width
+        sidebar.style.width = newWidth + 'vw';
+        mainContent.style.marginLeft = newWidth + 'vw'
+        mainContent.style.width = 100 - newWidth + 'vw';
+    });
+
+    document.addEventListener('mouseup', function() {
+        isResizing = false;
+        document.body.classList.remove('sidebar-resizing');
+        document.body.style.cursor = 'default';
+        document.body.classList.remove('no-select');
+    });
+
 </script>
 </body>
 </html>
