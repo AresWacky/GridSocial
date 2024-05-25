@@ -72,6 +72,7 @@
 <div class="content">
     <div class="nav-button" id="previousDay" style="background-color: orange;">
         <span class="material-symbols-outlined">chevron_left</span>
+        <span>Previous day</span>
     </div>
     <div class="scrollable-content" style="background-color: red;">
         <div class="date-display" style="background-color: green;">
@@ -95,8 +96,34 @@
         </div>
     </div>
     <div class="nav-button" id="nextDay" style="background-color: orange;">
+        <span>Next day</span>
         <span class="material-symbols-outlined">chevron_right</span>
     </div>
 </div>
+
+<script>
+    // Get current date
+    let currentDate = new Date();
+    updateDateDisplay();
+
+    // Previous day button click event
+    document.getElementById('previousDay').addEventListener('click', function() {
+        currentDate.setDate(currentDate.getDate() - 1);
+        updateDateDisplay();
+    });
+
+    // Next day button click event
+    document.getElementById('nextDay').addEventListener('click', function() {
+        currentDate.setDate(currentDate.getDate() + 1);
+        updateDateDisplay();
+    });
+
+    // Function to update date display
+    function updateDateDisplay() {
+        let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        let formattedDate = currentDate.toLocaleDateString('en-US', options);
+        document.getElementById('currentDate').innerText = formattedDate;
+    }
+</script>
 </body>
 </html>
