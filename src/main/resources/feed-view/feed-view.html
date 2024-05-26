@@ -12,9 +12,10 @@
             height: 100%;
             margin: 0;
             font-family: Arial, Helvetica, sans-serif;
+            background-color: #f0f2f5;
         }
         .navbar {
-            background-color: grey;
+            background-color: #1DA1F2;
             position: fixed;
             top: 0;
             width: 100%;
@@ -22,45 +23,93 @@
             display: flex;
             justify-content: center;
         }
-        .navbar button {
+        .navbar button, .navbar a {
             background: none;
             border: none;
             color: white;
             padding: 14px 20px;
             cursor: pointer;
+            text-decoration: none; /* Added to remove underline */
         }
         .content {
             display: flex;
-            height: 100%;
+            flex-direction: column;
+            align-items: center;
             padding-top: 50px; /* Height of navbar */
         }
-        .nav-button {
-            width: 10%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
         .scrollable-content {
-            width: 80%;
-            overflow-y: scroll;
-            padding: 20px;
-            box-sizing: border-box;
+            width: 100%;
+            max-width: 600px; /* Twitter-like container width */
+            background-color: white;
+            border-radius: 20px;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .date-display {
             padding: 10px;
             text-align: center;
+            font-size: 14px;
+            color: #657786;
         }
         .feed-container {
             display: flex;
             flex-direction: column;
             gap: 20px;
+            padding: 15px;
         }
         .feed-item {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #e1e8ed;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .feed-item img {
+            width: 100%;
+            border-radius: 20px;
+        }
+        .feed-item .caption {
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #14171a;
+        }
+        .feed-item .comments {
+            margin-top: 10px;
+        }
+        .feed-item .comments h3 {
+            font-size: 14px;
+            font-weight: bold;
+            color: #14171a;
+            margin-bottom: 5px;
+        }
+        .feed-item .comments ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .feed-item .comments ul li {
+            font-size: 14px;
+            color: #657786;
+            margin-bottom: 5px;
+        }
+        .nav-button {
+            background-color: #1DA1F2;
+            color: white;
+            border-radius: 9999px;
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .nav-button span {
+            margin-left: 5px;
+        }
+        /* Added style for the header links */
+        .navbar a {
+            color: white;
+            text-decoration: none; /* Added to remove underline */
+            font-weight: bold; /* Added to match the style */
+            font-size: 18px; /* Adjust size to match */
         }
     </style>
 </head>
@@ -68,21 +117,22 @@
 <div class="navbar">
     <button id="publicFeed">Public Feed</button>
     <button id="privateFeed">Private Feed</button>
+    <!-- Swapped the positions of Personal View and Profile -->
+    <a class="navbar-brand"><u>Profile</u> <i class="bi-person-circle"></i></a>
+    <button class="navbar-toggler" type="button" href="#">
+        <i>Personal View</i> <i class="bi-gear-fill"></i>
+    </button>
 </div>
 <div class="content">
-    <div class="nav-button" id="previousDay" style="background-color: orange;">
-        <span class="material-symbols-outlined">chevron_left</span>
-        <span>Previous day</span>
-    </div>
-    <div class="scrollable-content" style="background-color: red;">
-        <div class="date-display" style="background-color: green;">
+    <div class="scrollable-content">
+        <div class="date-display">
             <span id="currentDate">May 25, 2024 - Saturday</span>
         </div>
         <div class="feed-container">
             <!-- Existing feed items -->
             <div class="feed-item">
                 <a href="feed1.html"><img src="../images/Soccer.jpeg" alt="Soccer"></a>
-                <button class="caption">Soccer <span class="material-symbols-outlined">favorite</span></button>
+                <div class="caption">Soccer <span class="material-symbols-outlined">favorite</span></div>
                 <div class="comments">
                     <h3>Comments</h3>
                     <ul>
@@ -95,13 +145,49 @@
             <!-- Repeat for other feed items -->
         </div>
     </div>
-    <div class="nav-button" id="nextDay" style="background-color: orange;">
+    <div class="nav-button" id="previousDay">
+        <span class="material-symbols-outlined">chevron_left</span>
+        <span>Previous day</span>
+    </div>
+    <div class="nav-button" id="nextDay">
         <span>Next day</span>
         <span class="material-symbols-outlined">chevron_right</span>
     </div>
 </div>
 
+<!-- Sidebar from the second webpage -->
+<div id="sidebar" class="sidebar">
+    <div class="resize-handle"></div>
+    <!-- Sidebar content here -->
+</div>
+<div id="mainContent" class="container-fluid main-content">
+    <!-- MONDAY -->
+    <div class="column">
+        <!-- Remaining content from the second webpage -->
+        <div class="card bg-dark text-white day-box current-week rounded-bottom-4">
+            <div class="card-header">
+                Monday
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush list-group-item-dark" id="mondayList">
+                    <!-- List items will be added here dynamically -->
+                </ul>
+            </div>
+            <div class="card-footer" onclick="expandCard(this)">
+                <div class="expand-btn text-white"></div>
+            </div>
+        </div>
+        <div class="card bg-dark text-white day-box leftover-week rounded-bottom-4">
+            <div style="margin-top: 14px">Next-next Week</div>
+        </div>
+        <div class="card bg-dark text-white day-box leftover-week rounded-bottom-4" style="z-index: 0">
+            <div style="margin-top: 14px">Next-next Week</div>
+        </div>
+    </div>
+</div>
+
 <script>
+    // JavaScript code from the first webpage
     // Get current date
     let currentDate = new Date();
     updateDateDisplay();
@@ -124,6 +210,85 @@
         let formattedDate = currentDate.toLocaleDateString('en-US', options);
         document.getElementById('currentDate').innerText = formattedDate;
     }
+
+    // JavaScript code from the second webpage
+    function createListItems(listId, numItems) {
+        const list = document.getElementById(listId);
+        for (let i = 0; i < numItems; i++) {
+            const listItem = document.createElement('li');
+            listItem.className = 'list-group-item';
+            list.appendChild(listItem);
+        }
+    }
+
+    createListItems('mondayList', 24);
+
+    function expandCard(button) {
+        const currentCard = button.closest('.current-week');
+        const isExpanded = currentCard.classList.contains('expanded');
+
+        document.querySelectorAll('.current-week.expanded').forEach(card => {
+            card.classList.remove('expanded');
+        });
+
+        if (!isExpanded) {
+            currentCard.classList.add('expanded');
+        }
+    }
+
+    const firstColumn = document.querySelector('.column');
+    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+    for (let i = 1; i < 7; i++) {
+        const clone = firstColumn.cloneNode(true);
+        firstColumn.parentNode.appendChild(clone);
+        clone.querySelector('.card-header').textContent = daysOfWeek[i];
+        clone.querySelector('.list-group').id = `${daysOfWeek[i].toLowerCase()}List${i}`;
+    }
+
+    document.getElementById('toggleSidebar').addEventListener('click', function() {
+        document.body.classList.toggle('sidebar-open');
+        if (document.body.classList.contains('sidebar-open')) {
+            sidebar.style.display = 'block'; // Show the sidebar
+            sidebar.style.width = '30vw'; // Set initial width to 20% of the viewport width
+            mainContent.style.marginLeft = '30vw'; // Shift main content
+            mainContent.style.width = '70vw';
+        } else {
+            sidebar.style.display = 'none'; // Hide the sidebar
+            mainContent.style.marginLeft = '0'; // Reset main content position
+            mainContent.style.width = '100vw'; //Reset calendar width
+        }
+    });
+
+    let isResizing = false;
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const handle = document.querySelector('.resize-handle');
+
+    handle.addEventListener('mousedown', function(e) {
+        isResizing = true;
+        document.body.style.cursor = 'ew-resize';
+        document.body.classList.add('no-select');
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (!isResizing) return;
+        document.body.classList.add('sidebar-resizing');
+        let newWidth = e.clientX / window.innerWidth * 100;
+        if (newWidth < 15) newWidth = 15; // Minimum width is 30% of the viewport width
+        if (newWidth > 45) newWidth = 45; // Maximum width is 45% of the viewport width
+        sidebar.style.width = newWidth + 'vw';
+        mainContent.style.marginLeft = newWidth + 'vw'
+        mainContent.style.width = 100 - newWidth + 'vw';
+    });
+
+    document.addEventListener('mouseup', function() {
+        isResizing = false;
+        document.body.classList.remove('sidebar-resizing');
+        document.body.style.cursor = 'default';
+        document.body.classList.remove('no-select');
+    });
+
 </script>
 </body>
 </html>
