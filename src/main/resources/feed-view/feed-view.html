@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Feed</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="feed.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <style>
         body, html {
@@ -21,7 +20,8 @@
             width: 100%;
             z-index: 1;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            padding: 0 20px;
         }
         .navbar button, .navbar a {
             background: none;
@@ -29,27 +29,40 @@
             color: white;
             padding: 14px 20px;
             cursor: pointer;
-            text-decoration: none; /* Added to remove underline */
+            text-decoration: none;
         }
         .content {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 50px; /* Height of navbar */
+            justify-content: center;
+            padding-top: 50px;
+            padding-bottom: 50px; /* Height of navbar */
         }
         .scrollable-content {
             width: 100%;
-            max-width: 600px; /* Twitter-like container width */
+            max-width: 600px;
             background-color: white;
             border-radius: 20px;
             margin-top: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
         .date-display {
             padding: 10px;
             text-align: center;
-            font-size: 14px;
+            font-size: 18px;
+            font-weight: bold;
             color: #657786;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .date-display button {
+            margin: 0 10px;
+            background: none;
+            border: none;
+            color: #1DA1F2;
+            cursor: pointer;
+            font-weight: bold;
         }
         .feed-container {
             display: flex;
@@ -61,6 +74,19 @@
             border-bottom: 1px solid #e1e8ed;
             padding-bottom: 15px;
             margin-bottom: 15px;
+            border-radius: 20px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .feed-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+        .feed-item-header .username {
+            font-weight: bold;
         }
         .feed-item img {
             width: 100%;
@@ -71,25 +97,68 @@
             margin-top: 10px;
             font-size: 16px;
             color: #14171a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .feed-item .comments {
+        .feed-item .caption .icons {
+            display: flex;
+            gap: 10px;
+        }
+        .options-popup, .comments-popup {
+            position: absolute;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            display: none;
+            z-index: 2;
+        }
+        .options-popup {
+            right: 10px;
+            top: 50px;
+        }
+        .comments {
             margin-top: 10px;
+            display: none;
         }
-        .feed-item .comments h3 {
-            font-size: 14px;
-            font-weight: bold;
-            color: #14171a;
-            margin-bottom: 5px;
-        }
-        .feed-item .comments ul {
+        .comments ul {
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
-        .feed-item .comments ul li {
+        .comments ul li {
             font-size: 14px;
             color: #657786;
             margin-bottom: 5px;
+        }
+        .following-container {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+        .following-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .following-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .following-item img {
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
         }
         .nav-button {
             background-color: #1DA1F2;
@@ -100,39 +169,63 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            position: fixed;
+            z-index: 2;
         }
         .nav-button span {
             margin-left: 5px;
         }
-        /* Added style for the header links */
-        .navbar a {
-            color: white;
-            text-decoration: none; /* Added to remove underline */
-            font-weight: bold; /* Added to match the style */
-            font-size: 18px; /* Adjust size to match */
+        .nav-button#previousDay {
+            left: 10px;
+            top: 50%;
+        }
+        .nav-button#nextDay {
+            right: 10px;
+            top: 50%;
         }
     </style>
 </head>
 <body>
 <div class="navbar">
-    <button id="publicFeed">Public Feed</button>
-    <button id="privateFeed">Private Feed</button>
-    <!-- Swapped the positions of Personal View and Profile -->
-    <a class="navbar-brand"><u>Profile</u> <i class="bi-person-circle"></i></a>
-    <button class="navbar-toggler" type="button" href="#">
-        <i>Personal View</i> <i class="bi-gear-fill"></i>
-    </button>
+    <a href="#" id="profileLink">
+        <img src="../images/profile-user.jpeg" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%;">
+    </a>
 </div>
 <div class="content">
+    <div class="following-container">
+        <div class="following-header">People You Follow</div>
+        <div class="following-item">
+            <img src="../images/profile1.jpeg" alt="Profile 1">
+            <span>User2</span>
+        </div>
+        <div class="following-item">
+            <img src="../images/profile2.jpeg" alt="Profile 2">
+            <span>User3</span>
+        </div>
+        <!-- Repeat for other followed users -->
+    </div>
     <div class="scrollable-content">
         <div class="date-display">
+            <button id="publicFeed">Public Feed</button>
             <span id="currentDate">May 25, 2024 - Saturday</span>
+            <button id="privateFeed">Private Feed</button>
         </div>
         <div class="feed-container">
-            <!-- Existing feed items -->
+            <!-- Example feed item -->
             <div class="feed-item">
-                <a href="feed1.html"><img src="../images/Soccer.jpeg" alt="Soccer"></a>
-                <div class="caption">Soccer <span class="material-symbols-outlined">favorite</span></div>
+                <div class="feed-item-header">
+                    <span class="username">User1</span>
+                    <span class="time-since">2w</span>
+                    <span class="material-symbols-outlined dot-menu">more_vert</span>
+                </div>
+                <img src="../images/Soccer.jpeg" alt="Soccer">
+                <div class="caption">
+                    Soccer
+                    <div class="icons">
+                        <span class="material-symbols-outlined">favorite</span>
+                        <span class="material-symbols-outlined chat-icon">chat_bubble_outline</span>
+                    </div>
+                </div>
                 <div class="comments">
                     <h3>Comments</h3>
                     <ul>
@@ -140,6 +233,13 @@
                         <li>User 11: Superb!</li>
                         <li>User 12: Impressive!</li>
                     </ul>
+                </div>
+                <div class="options-popup">
+                    <button>Report</button>
+                    <button>Unfollow</button>
+                    <button>Add to Favorites</button>
+                    <button>Go to post</button>
+                    <button>Cancel</button>
                 </div>
             </div>
             <!-- Repeat for other feed items -->
@@ -155,140 +255,47 @@
     </div>
 </div>
 
-<!-- Sidebar from the second webpage -->
-<div id="sidebar" class="sidebar">
-    <div class="resize-handle"></div>
-    <!-- Sidebar content here -->
-</div>
-<div id="mainContent" class="container-fluid main-content">
-    <!-- MONDAY -->
-    <div class="column">
-        <!-- Remaining content from the second webpage -->
-        <div class="card bg-dark text-white day-box current-week rounded-bottom-4">
-            <div class="card-header">
-                Monday
-            </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush list-group-item-dark" id="mondayList">
-                    <!-- List items will be added here dynamically -->
-                </ul>
-            </div>
-            <div class="card-footer" onclick="expandCard(this)">
-                <div class="expand-btn text-white"></div>
-            </div>
-        </div>
-        <div class="card bg-dark text-white day-box leftover-week rounded-bottom-4">
-            <div style="margin-top: 14px">Next-next Week</div>
-        </div>
-        <div class="card bg-dark text-white day-box leftover-week rounded-bottom-4" style="z-index: 0">
-            <div style="margin-top: 14px">Next-next Week</div>
-        </div>
-    </div>
-</div>
-
 <script>
-    // JavaScript code from the first webpage
-    // Get current date
     let currentDate = new Date();
     updateDateDisplay();
 
-    // Previous day button click event
     document.getElementById('previousDay').addEventListener('click', function() {
         currentDate.setDate(currentDate.getDate() - 1);
         updateDateDisplay();
     });
 
-    // Next day button click event
     document.getElementById('nextDay').addEventListener('click', function() {
         currentDate.setDate(currentDate.getDate() + 1);
         updateDateDisplay();
     });
 
-    // Function to update date display
     function updateDateDisplay() {
         let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         let formattedDate = currentDate.toLocaleDateString('en-US', options);
         document.getElementById('currentDate').innerText = formattedDate;
     }
 
-    // JavaScript code from the second webpage
-    function createListItems(listId, numItems) {
-        const list = document.getElementById(listId);
-        for (let i = 0; i < numItems; i++) {
-            const listItem = document.createElement('li');
-            listItem.className = 'list-group-item';
-            list.appendChild(listItem);
-        }
-    }
+    document.getElementById('publicFeed').addEventListener('click', function() {
+        // Load public feed
+    });
 
-    createListItems('mondayList', 24);
+    document.getElementById('privateFeed').addEventListener('click', function() {
+        // Load private feed
+    });
 
-    function expandCard(button) {
-        const currentCard = button.closest('.current-week');
-        const isExpanded = currentCard.classList.contains('expanded');
-
-        document.querySelectorAll('.current-week.expanded').forEach(card => {
-            card.classList.remove('expanded');
+    document.querySelectorAll('.dot-menu').forEach(dotMenu => {
+        dotMenu.addEventListener('click', function() {
+            const optionsPopup = this.closest('.feed-item').querySelector('.options-popup');
+            optionsPopup.style.display = optionsPopup.style.display === 'none' ? 'block' : 'none';
         });
-
-        if (!isExpanded) {
-            currentCard.classList.add('expanded');
-        }
-    }
-
-    const firstColumn = document.querySelector('.column');
-    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-    for (let i = 1; i < 7; i++) {
-        const clone = firstColumn.cloneNode(true);
-        firstColumn.parentNode.appendChild(clone);
-        clone.querySelector('.card-header').textContent = daysOfWeek[i];
-        clone.querySelector('.list-group').id = `${daysOfWeek[i].toLowerCase()}List${i}`;
-    }
-
-    document.getElementById('toggleSidebar').addEventListener('click', function() {
-        document.body.classList.toggle('sidebar-open');
-        if (document.body.classList.contains('sidebar-open')) {
-            sidebar.style.display = 'block'; // Show the sidebar
-            sidebar.style.width = '30vw'; // Set initial width to 20% of the viewport width
-            mainContent.style.marginLeft = '30vw'; // Shift main content
-            mainContent.style.width = '70vw';
-        } else {
-            sidebar.style.display = 'none'; // Hide the sidebar
-            mainContent.style.marginLeft = '0'; // Reset main content position
-            mainContent.style.width = '100vw'; //Reset calendar width
-        }
     });
 
-    let isResizing = false;
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('mainContent');
-    const handle = document.querySelector('.resize-handle');
-
-    handle.addEventListener('mousedown', function(e) {
-        isResizing = true;
-        document.body.style.cursor = 'ew-resize';
-        document.body.classList.add('no-select');
+    document.querySelectorAll('.chat-icon').forEach(chatIcon => {
+        chatIcon.addEventListener('click', function() {
+            const comments = this.closest('.feed-item').querySelector('.comments');
+            comments.style.display = comments.style.display === 'none' ? 'block' : 'none';
+        });
     });
-
-    document.addEventListener('mousemove', function(e) {
-        if (!isResizing) return;
-        document.body.classList.add('sidebar-resizing');
-        let newWidth = e.clientX / window.innerWidth * 100;
-        if (newWidth < 15) newWidth = 15; // Minimum width is 30% of the viewport width
-        if (newWidth > 45) newWidth = 45; // Maximum width is 45% of the viewport width
-        sidebar.style.width = newWidth + 'vw';
-        mainContent.style.marginLeft = newWidth + 'vw'
-        mainContent.style.width = 100 - newWidth + 'vw';
-    });
-
-    document.addEventListener('mouseup', function() {
-        isResizing = false;
-        document.body.classList.remove('sidebar-resizing');
-        document.body.style.cursor = 'default';
-        document.body.classList.remove('no-select');
-    });
-
 </script>
 </body>
 </html>
