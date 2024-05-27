@@ -31,13 +31,27 @@
             z-index: 3;
         }
 
-        #vertical-slider-container {
+        .calendar-control {
             position: fixed;
             right: 6px;
-            height: calc((100vh - 76px) / 2);
-            margin-top:  calc((100vh - 76px) / 4);
+            top: 50%;
+            transform: translateY(-50%);
             display: flex;
+            flex-direction: column;
             align-items: center;
+            z-index: 10;
+            border-radius: 10px;
+            transition: opacity 0.3s ease;
+            opacity: 0.75;
+        }
+
+        .calendar-control:hover {
+            opacity: 1;
+        }
+
+        #vertical-slider-container {
+            height: calc((100vh - 76px) / 2);
+            display: flex;
             z-index: 10;
             padding: 8px;
             border-radius: 10px;
@@ -47,7 +61,28 @@
         }
 
         #vertical-slider-container:hover {
-            opacity: 1; !important;
+            opacity: 1;
+        }
+
+        button.arrow-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px; /* Adjusted width for better spacing */
+            height: 36px; /* Adjusted height for better spacing */
+            border-radius: 10px;
+            border: 1px solid #9d9d9d;
+            background-color: #343a40; /* Dark background color */
+            color: white;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            opacity: 0.65;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        button.arrow-btn:hover {
+            opacity: 1 !important;
         }
 
         input[type=range][orient=vertical] {
@@ -129,6 +164,10 @@
             .expand-btn {
                 display: none;
             }
+            #vertical-slider-container {
+                display: none;
+            }
+
         }
 
         .expand-btn {
@@ -203,7 +242,7 @@
         .sidebar .resize-handle {
             width: 10px;
             height: 100%;
-            background-color: #666;
+            background-color: #9D9D9DFF;
             cursor: ew-resize;
             position: absolute;
             top: 0;
@@ -211,12 +250,11 @@
         }
 
         /* Remove transition when resizing the sidebar */
-        .sidebar-resizing .sidebar{
-            transition: none;
-        }
+        .sidebar-resizing .sidebar,
         .sidebar-resizing #mainContent {
             transition: none;
         }
+
 
         .sidebar-open .sidebar {
             width: 30vw; /* Initial width when sidebar is open */
@@ -231,10 +269,10 @@
         }
 
         .no-select {
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none;    /* Firefox */
-            -ms-user-select: none;     /* Internet Explorer/Edge */
-            user-select: none;         /* Non-prefixed version, currently supported by Chrome, Opera, and Firefox */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
     </style>
@@ -261,18 +299,16 @@
             <a class="nav-link bg-dark text-white-50" style="font-size:22px;" aria-current="page" href="#">Feed</a>
         </div>
 
-        <button class="navbar-toggler" type="button" href="#">
+        <button class="navbar-toggler dropdown" role="button" href="#">
             <i>Profile</i> <i class="bi-person-circle"></i>
         </button>
     </div>
 
 </nav>
 
-<div id="sidebar" class="sidebar">
+<div id="sidebar" class="sidebar" style="">
         <div class="btn-group btn-group-toggle d-flex gx" data-toggle="buttons" style="margin-right: 10px;">
-            <label class="btn btn-secondary active">
-                Friends
-            </label>
+            <label class="btn btn-secondary active">Friends</label>
             <label class="btn btn-secondary">Groups</label>
         </div>
     <table class="table table-dark table-striped">
@@ -295,8 +331,16 @@
     <div class="resize-handle"></div>
 </div>
 
-<div id="vertical-slider-container" class="bg-dark">
-    <input type="range" id="vertical-slider" orient="vertical" min="0" max="2" step="1">
+<div class="calendar-control" style="margin-bottom: 10px">
+    <button id="up-arrow" class="arrow-btn bg-dark"><i class="bi bi-chevron-up"></i></button>
+
+    <div id="vertical-slider-container" class="bg-dark">
+
+     <input type="range" id="vertical-slider" orient="vertical" min="0" max="2" step="1">
+
+    </div>
+    <button id="down-arrow" class="arrow-btn bg-dark"><i class="bi bi-chevron-down"></i></button>
+
 </div>
 
 <div id="mainContent" class="container-fluid main-content">
@@ -369,9 +413,9 @@
         document.body.classList.toggle('sidebar-open');
         if (document.body.classList.contains('sidebar-open')) {
             sidebar.style.display = 'block'; // Show the sidebar
-            sidebar.style.width = '30vw'; // Set initial width to 20% of the viewport width
-            mainContent.style.marginLeft = '30vw'; // Shift main content
-            mainContent.style.width = '70vw';
+            sidebar.style.width = '15vw';
+            mainContent.style.marginLeft = '15vw'; // Shift main content
+            mainContent.style.width = '85vw';
         } else {
             sidebar.style.display = 'none'; // Hide the sidebar
             mainContent.style.marginLeft = '0'; // Reset main content position
