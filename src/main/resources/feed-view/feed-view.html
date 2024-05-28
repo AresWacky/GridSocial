@@ -34,8 +34,9 @@
         .content {
             display: flex;
             justify-content: center;
+            align-items: flex-start;
             padding-top: 50px;
-            padding-bottom: 50px; /* Height of navbar */
+            height: calc(100vh - 50px); /* Full height minus navbar height */
         }
         .scrollable-content {
             width: 100%;
@@ -44,7 +45,7 @@
             border-radius: 20px;
             margin-top: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            overflow: auto; /* Enable scrolling if needed */
         }
         .date-display {
             padding: 10px;
@@ -55,12 +56,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            gap: 20px;
         }
         .date-display button {
             margin: 0 10px;
-            background: none;
+            background-color: #1DA1F2;
             border: none;
-            color: #1DA1F2;
+            border-radius: 5px;
+            color: white;
+            padding: 5px 10px;
             cursor: pointer;
             font-weight: bold;
         }
@@ -69,6 +73,7 @@
             flex-direction: column;
             gap: 20px;
             padding: 15px;
+            margin: 10px; /* Add margin */
         }
         .feed-item {
             border-bottom: 1px solid #e1e8ed;
@@ -78,6 +83,7 @@
             background-color: white;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             position: relative;
+            padding: 15px; /* Add padding */
         }
         .feed-item-header {
             display: flex;
@@ -104,6 +110,12 @@
         .feed-item .caption .icons {
             display: flex;
             gap: 10px;
+        }
+        .material-symbols-outlined.favorite {
+            color: #e0245e;
+        }
+        .material-symbols-outlined.unfavorite {
+            color: #657786;
         }
         .options-popup, .comments-popup {
             position: absolute;
@@ -222,7 +234,7 @@
                 <div class="caption">
                     Soccer
                     <div class="icons">
-                        <span class="material-symbols-outlined">favorite</span>
+                        <span class="material-symbols-outlined unfavorite heart-icon">favorite</span>
                         <span class="material-symbols-outlined chat-icon">chat_bubble_outline</span>
                     </div>
                 </div>
@@ -294,6 +306,18 @@
         chatIcon.addEventListener('click', function() {
             const comments = this.closest('.feed-item').querySelector('.comments');
             comments.style.display = comments.style.display === 'none' ? 'block' : 'none';
+        });
+    });
+
+    document.querySelectorAll('.heart-icon').forEach(heartIcon => {
+        heartIcon.addEventListener('click', function() {
+            if (this.classList.contains('unfavorite')) {
+                this.classList.remove('unfavorite');
+                this.classList.add('favorite');
+            } else {
+                this.classList.remove('favorite');
+                this.classList.add('unfavorite');
+            }
         });
     });
 </script>
