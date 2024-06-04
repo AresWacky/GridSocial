@@ -1,4 +1,4 @@
-package user;
+package com.gridsocial.model;
 
 import jakarta.persistence.*;
 import java.util.HashSet;

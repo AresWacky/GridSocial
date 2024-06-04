@@ -1,5 +1,7 @@
-package user;
+package com.gridsocial.service;
 
+import com.gridsocial.model.User;
+import com.gridsocial.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
