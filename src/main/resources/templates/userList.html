@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User List</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>User List</h1>
+<a href="/user/create">Create New User</a>
+<table>
+  <tr>
+    <th>Username</th>
+    <th>Email</th>
+    <th>Actions</th>
+  </tr>
+  <tr th:each="user : ${userList}">
+    <td th:text="${user.username}">Username</td>
+    <td th:text="${user.email}">Email</td>
+    <td>
+      <a th:href="@{/user/edit/{id}(id=${user.id})}">Edit</a>
+      <a th:href="@{/user/delete/{id}(id=${user.id})}">Delete</a>
+      <a th:href="@{/user/view/{id}(id=${user.id})}">View</a>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

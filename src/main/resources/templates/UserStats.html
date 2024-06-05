@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Statistics</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+</head>
+<body>
+<div class="navbar">
+    <a href="Report.html" th:href="@{/report/all}">Reports</a>
+    <a href="Requests.html">Requests</a>
+    <a href="Stats.html" class="active" th:href="@{/stats/all}">Statistics</a>
+</div>
+<div id="reports" class="content">
+    <div class="header-container">
+        <h1>User Statistics</h1>
+        <span class="total-number">Total<span th:text="${userCount}" ></span></span>
+    </div>
+
+
+    <table>
+        <thead>
+        <tr>
+            <th>User</th>
+            <th>Membership</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${userList}">
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.group != null ? user.group.name : ' '}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
