@@ -1,7 +1,7 @@
 package com.csc340.test.adim.User;
 
-import com.csc340.test.adim.group.GroupService;
 import com.csc340.test.adim.group.Group;
+import com.csc340.test.adim.group.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +9,6 @@ import java.util.List;
 
 @Service
 public class UserService {
-
     @Autowired
     private UserRepository userRepository;
 
@@ -38,12 +37,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public long getUserCount() {return userRepository.count();
+    public long getUserCount() {
+        return userRepository.count();
     }
 
     public User subscribeToGroup(Long userId, Long groupId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-
         Group group = groupService.getGroupById(groupId);
         if (group == null) {
             throw new RuntimeException("Group not found");
@@ -51,9 +50,11 @@ public class UserService {
         user.setGroup(group);
         return userRepository.save(user);
     }
+
     public void leaveGroup(Long userId, Long groupId) {
         // Logic to leave a group
     }
+
     public void updateUser(Long userId, User userDetails) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         user.setUsername(userDetails.getUsername());

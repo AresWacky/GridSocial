@@ -1,13 +1,11 @@
 package com.csc340.test.adim.User;
 
 import com.csc340.test.adim.comment.Comment;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +26,10 @@ public class User {
     private String role;
     private String password;
 
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "group_id")
     private com.csc340.test.adim.group.Group group;
-
-
-
 }
-

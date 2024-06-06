@@ -18,7 +18,6 @@ import java.util.Map;
 @Controller
 @RequestMapping
 public class AdminController {
-
     @Autowired
     private UserService userService;
 
@@ -28,29 +27,28 @@ public class AdminController {
     @Autowired
     private GroupService groupService;
 
-    //methods that handle user access
+    // methods that handle user access
 
-    //gets all users
-
-
+    // gets all users
     @GetMapping("/stats/users/all")
     public String getAllUsers(Model model) {
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "UserStats";
     }
-    //deletes a user
+
+    // deletes a user
     @DeleteMapping("/user/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-        return "redirect:/all/users";
+        return "redirect:/stats/users/all";
     }
 
-    //bans a user
+    // bans a user
     @PostMapping("/user/{id}/ban")
     public String banUser(@PathVariable Long id) {
         userService.banUser(id);
-        return "redirect:Report";
+        return "redirect:/stats/users/all";
     }
 
     @GetMapping("/stats/user")
@@ -60,10 +58,9 @@ public class AdminController {
         return "UserStats";
     }
 
+    // Methods that handle comments
 
-    //Methods that handle comments
-
-    //gets all comments
+    // gets all comments
     @GetMapping("/comments")
     public String getAllComments(Model model) {
         List<Comment> comments = commentService.getAllComments();
@@ -71,25 +68,24 @@ public class AdminController {
         return "allComments";
     }
 
-
-    //Delete comments
+    // Delete comments
     @DeleteMapping("/comments/{id}")
     public String deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
         return "redirect:/comments";
     }
-    //gets comments by a user
+
+    // gets comments by a user
     @GetMapping("/{id}/comments")
     public String getCommentsByUserId(@PathVariable Long id, Model model) {
         List<Comment> comments = commentService.getAllComments().stream()
-                .filter(comment -> comment.getUserId().equals(id))
+                .filter(comment -> comment.getUser().getId().equals(id))
                 .toList();
         model.addAttribute("comments", comments);
         return "userComments";
     }
 
-
-    //Methods for groups
+    // Methods for groups
     @GetMapping("/groups")
     public String getAllGroups(Model model) {
         List<Group> groups = groupService.getAllGroups();
@@ -97,8 +93,7 @@ public class AdminController {
         return "allGroups";
     }
 
-
-    //gets all group member
+    // gets all group member
     @GetMapping("/groups/{groupId}/members")
     public String getGroupMembers(@PathVariable Long groupId, Model model) {
         Group group = groupService.getGroupById(groupId);
@@ -107,42 +102,29 @@ public class AdminController {
         return "groupMembers";
     }
 
-    //get all group member count
-    @GetMapping("/groups/{groupId}/stats")
-    public String getGroupStatistics(@PathVariable Long groupId, Model model) {
+    // get all group member count
+    @GetMapping("/groups/{ groupId}/member-count")
+    public String getGroupMemberCount(@PathVariable Long groupId, Model model) {
         Group group = groupService.getGroupById(groupId);
-        Map<String, Object> statistics = new HashMap<>();
-        if (group != null) {
-            statistics.put("memberCount", group.getMembers().size());
+        int memberCount = group != null ? group.getMembers().size() : 0;
+        model.addAttribute("memberCount", memberCount);
+        return "groupMemberCount";
+    }
+
+    // gets all group statistics
+    @GetMapping("/stats/groups")
+    public String getGroupStatistics(Model model) {
+        List<Group> groups = groupService.getAllGroups();
+        Map<Group, Integer> groupStatistics = new HashMap<>();
+        for (Group group : groups) {
+            groupStatistics.put(group, group.getMembers().size());
         }
-        model.addAttribute("statistics", statistics);
+        model.addAttribute("groupStatistics", groupStatistics);
         return "groupStats";
     }
-    //delete a group
-    @DeleteMapping("/group/{id}")
-    public String deleteGroup(@PathVariable Long id) {
-        groupService.deleteGroup(id);
-        return "redirect:/groups";
-    }
-
-
-    //remove a group member
-    @DeleteMapping("/{groupId}/members/{memberId}")
-    public String removeGroupMember(@PathVariable Long groupId, @PathVariable Long memberId) {
-        groupService.removeGroupMember(groupId, memberId);
-        return "redirect:/groups/" + groupId + "/members";
-    }
-
-
-    //count groups and users
-    @GetMapping("/stats/all")
-    public String getUsageStatistics(Model model) {
-        long userCount = userService.getUserCount();
-        long groupCount = groupService.countGroups();
-        Map<String, Object> statistics = new HashMap<>();
-        statistics.put("userCount", userCount);
-        statistics.put("groupCount", groupCount);
-        model.addAttribute("statistics", statistics);
-        return "Stats";
-    }
 }
+
+
+
+
+
