@@ -1,11 +1,17 @@
 package com.gridsocial.model;
 
 import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class User {
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,16 +20,12 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
+    @Column(unique = true, nullable = false)
+    private String email;
+
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_friends",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "friend_id")
-    )
-    private Set<User> friends = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -49,12 +51,6 @@ public class User {
         this.password = password;
     }
 
-    public Set<User> getFriends() {
-        return friends;
-    }
 
-    public void setFriends(Set<User> friends) {
-        this.friends = friends;
-    }
 // getters and setters
 }
