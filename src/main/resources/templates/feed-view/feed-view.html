@@ -195,12 +195,69 @@
             right: 10px;
             top: 50%;
         }
+        /* Profile Popup Modal */
+        .profile-popup {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 3;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        .profile-popup-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+        .profile-popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .profile-popup-header h2 {
+            margin: 0;
+        }
+        .close-btn {
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .profile-picture {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .profile-picture img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+        }
+        .profile-picture input {
+            margin-top: 10px;
+        }
+        .profile-info {
+            margin-top: 20px;
+        }
+        .profile-info label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 <div class="navbar">
     <a href="#" id="profileLink">
-        <img src="../images/profile-user.jpeg" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%;">
+        <img src="../images/profile-user.jpeg" alt="Profile" id="navbarProfilePicture" style="width: 30px; height: 30px; border-radius: 50%;">
     </a>
 </div>
 <div class="content">
@@ -223,30 +280,45 @@
             <button id="privateFeed">Private Feed</button>
         </div>
         <div class="feed-container" id="feed-container">
-            <!-- Feed items will be appended here by JavaScript -->
+            <!-- Feed items will be appended here -->
         </div>
-        <form id="feed-form">
-            <textarea id="feed-content" placeholder="Write your feed..." class="form-control"></textarea>
-            <button type="submit" class="btn btn-primary mt-2">Post</button>
-        </form>
-    </div>
-    <div class="nav-button" id="previousDay">
-        <span class="material-symbols-outlined">chevron_left</span>
-        <span>Previous day</span>
-    </div>
-    <div class="nav-button" id="nextDay">
-        <span>Next day</span>
-        <span class="material-symbols-outlined">chevron_right</span>
     </div>
 </div>
 
+<!-- Profile Popup Modal -->
+<div id="profilePopup" class="profile-popup">
+    <div class="profile-popup-content">
+        <div class="profile-popup-header">
+            <h2>Profile</h2>
+            <button class="close-btn" id="closeProfilePopup">&times;</button>
+        </div>
+        <div class="profile-picture">
+            <img src="../images/profile-user.jpeg" alt="Profile Picture" id="profilePicture">
+            <input type="file" id="uploadProfilePicture" accept="image/*">
+        </div>
+        <div class="profile-info">
+            <label for="username">Username:</label>
+            <input type="text" id="username" value="User1" readonly>
+            <label for="bio">Bio:</label>
+            <textarea id="bio" rows="4" readonly>Sample bio text...</textarea>
+            <!-- Add more profile info as needed -->
+        </div>
+    </div>
+</div>
+
+<!-- Form for creating new feed -->
+<form id="feedForm">
+    <input type="text" id="feedContent" placeholder="What's happening?">
+    <button type="submit">Post</button>
+</form>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const feedContainer = document.getElementById('feed-container');
-        const feedForm = document.getElementById('feed-form');
-        const feedContent = document.getElementById('feed-content');
-
         // Fetch and display feeds
+        const feedContainer = document.getElementById('feed-container');
+        const feedForm = document.getElementById('feedForm');
+        const feedContent = document.getElementById('feedContent');
+
         fetch('/api/feeds')
             .then(response => response.json())
             .then(feeds => {
@@ -287,17 +359,18 @@
 
         // Post new feed
         feedForm.addEventListener('submit', event => {
-            event.preventDefault();
-            const content = feedContent.value;
+            event.preventDefault(); // Prevent the default form submission
+            const content = feedContent.value; // Get the content of the feed
             fetch('/api/feeds', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ content })
+                body: JSON.stringify({ content }) // Send the content to the server
             })
                 .then(response => response.json())
                 .then(feed => {
+                    // Create a new feed item element for the posted feed
                     const feedElement = document.createElement('div');
                     feedElement.classList.add('feed-item');
                     feedElement.innerHTML = `
@@ -333,23 +406,23 @@
         });
 
         // Date navigation
-        let currentDate = new Date();
-        updateDateDisplay();
+        let currentDate = new Date(); // Initialize the current date
+        updateDateDisplay(); // Update the displayed date
 
         document.getElementById('previousDay').addEventListener('click', function() {
-            currentDate.setDate(currentDate.getDate() - 1);
-            updateDateDisplay();
+            currentDate.setDate(currentDate.getDate() - 1); // Go to the previous day
+            updateDateDisplay(); // Update the displayed date
         });
 
         document.getElementById('nextDay').addEventListener('click', function() {
-            currentDate.setDate(currentDate.getDate() + 1);
-            updateDateDisplay();
+            currentDate.setDate(currentDate.getDate() + 1); // Go to the next day
+            updateDateDisplay(); // Update the displayed date
         });
 
         function updateDateDisplay() {
             let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            let formattedDate = currentDate.toLocaleDateString('en-US', options);
-            document.getElementById('currentDate').innerText = formattedDate;
+            let formattedDate = currentDate.toLocaleDateString('en-US', options); // Format the date
+            document.getElementById('currentDate').innerText = formattedDate; // Display the date
         }
 
         // Feed buttons (public/private)
@@ -365,7 +438,7 @@
         document.querySelectorAll('.dot-menu').forEach(dotMenu => {
             dotMenu.addEventListener('click', function() {
                 const optionsPopup = this.closest('.feed-item').querySelector('.options-popup');
-                optionsPopup.style.display = optionsPopup.style.display === 'none' ? 'block' : 'none';
+                optionsPopup.style.display = optionsPopup.style.display === 'none' ? 'block' : 'none'; // Toggle display
             });
         });
 
@@ -373,7 +446,7 @@
         document.querySelectorAll('.chat-icon').forEach(chatIcon => {
             chatIcon.addEventListener('click', function() {
                 const comments = this.closest('.feed-item').querySelector('.comments');
-                comments.style.display = comments.style.display === 'none' ? 'block' : 'none';
+                comments.style.display = comments.style.display === 'none' ? 'block' : 'none'; // Toggle display
             });
         });
 
@@ -388,6 +461,40 @@
                     this.classList.add('unfavorite');
                 }
             });
+        });
+
+        // Profile Popup Functionality
+        const profileLink = document.getElementById('profileLink');
+        const profilePopup = document.getElementById('profilePopup');
+        const closeProfilePopup = document.getElementById('closeProfilePopup');
+        const uploadProfilePicture = document.getElementById('uploadProfilePicture');
+        const profilePicture = document.getElementById('profilePicture');
+        const navbarProfilePicture = document.getElementById('navbarProfilePicture');
+
+        profileLink.addEventListener('click', event => {
+            event.preventDefault();
+            profilePopup.style.display = 'block'; // Show the profile popup
+        });
+
+        closeProfilePopup.addEventListener('click', () => {
+            profilePopup.style.display = 'none'; // Hide the profile popup
+        });
+
+        uploadProfilePicture.addEventListener('change', event => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                profilePicture.src = e.target.result; // Update the profile picture in the popup
+                navbarProfilePicture.src = e.target.result; // Update the profile picture in the navbar
+            };
+            reader.readAsDataURL(file); // Read the file as a data URL
+        });
+
+        // Close the profile popup if clicked outside of it
+        window.addEventListener('click', event => {
+            if (event.target == profilePopup) {
+                profilePopup.style.display = 'none';
+            }
         });
     });
 </script>
