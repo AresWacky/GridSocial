@@ -1,20 +1,32 @@
 package com.gridsocial.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@Table(name = "feeds")
 public class Feed {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String content;
-    private String username; // Username of the user who posted the feed
-    // other fields as needed
 
-    // getters and setters
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "feed")
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "feed")
+    private List<Likes> likes;
+
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -31,11 +43,35 @@ public class Feed {
         this.content = content;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Likes> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Likes> likes) {
+        this.likes = likes;
     }
 }
