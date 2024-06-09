@@ -1,15 +1,30 @@
 package com.gridsocial.config;
 
-import com.gridsocial.WebtestApplication;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 
-
-//i will work on this -Ethan M.
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig {
-    public static void main(String[] args) {
-        SpringApplication.run(WebtestApplication.class, args);
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests(authorize -> authorize
+                        .requestMatchers("/login", "/signup", "/css/**", "/js/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/home", true)
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .permitAll()
+                );
+        return http.build();
     }
 }
