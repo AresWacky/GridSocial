@@ -4,100 +4,392 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Feed</title>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="feed.css">
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f0f2f5;
+        }
+        .navbar {
+            background-color: #1DA1F2;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        .navbar button, .navbar a {
+            background: none;
+            border: none;
+            color: white;
+            padding: 14px 20px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            height: calc(100vh - 50px); /* Full height minus navbar height */
+        }
+        .scrollable-content {
+            width: 100%;
+            max-width: 600px;
+            background-color: white;
+            border-radius: 20px;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: auto; /* Enable scrolling if needed */
+        }
+        .date-display {
+            padding: 10px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #657786;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .date-display button {
+            margin: 0 10px;
+            background-color: #1DA1F2;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .feed-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 15px;
+            margin: 10px; /* Add margin */
+        }
+        .feed-item {
+            border-bottom: 1px solid #e1e8ed;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-radius: 20px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding: 15px; /* Add padding */
+        }
+        .feed-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+        .feed-item-header .username {
+            font-weight: bold;
+        }
+        .feed-item img {
+            width: 100%;
+            border-radius: 20px;
+        }
+        .feed-item .caption {
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #14171a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .feed-item .caption .icons {
+            display: flex;
+            gap: 10px;
+        }
+        .material-symbols-outlined.favorite {
+            color: #e0245e;
+        }
+        .material-symbols-outlined.unfavorite {
+            color: #657786;
+        }
+        .options-popup, .comments-popup {
+            position: absolute;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            display: none;
+            z-index: 2;
+        }
+        .options-popup {
+            right: 10px;
+            top: 50px;
+        }
+        .comments {
+            margin-top: 10px;
+            display: none;
+        }
+        .comments ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .comments ul li {
+            font-size: 14px;
+            color: #657786;
+            margin-bottom: 5px;
+        }
+        .following-container {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+        .following-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .following-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .following-item img {
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+        .nav-button {
+            background-color: #1DA1F2;
+            color: white;
+            border-radius: 9999px;
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            position: fixed;
+            z-index: 2;
+        }
+        .nav-button span {
+            margin-left: 5px;
+        }
+        .nav-button#previousDay {
+            left: 10px;
+            top: 50%;
+        }
+        .nav-button#nextDay {
+            right: 10px;
+            top: 50%;
+        }
+    </style>
 </head>
 <body>
-<div class="feed-container">
-    <div class="feed-item">
-        <a href="feed1.html"><img src="../images/Soccer.jpeg" alt="Soccer"></a>
-        <button class="caption">Soccer <span class="material-symbols-outlined">favorite</span></button>
-        <div class="comments">
-            <h3>Comments</h3>
-            <ul>
-                <li>User 10: Fantastic!</li>
-                <li>User 11: Superb!</li>
-                <li>User 12: Impressive!</li>
-            </ul>
+<div class="navbar">
+    <a href="#" id="profileLink">
+        <img src="../images/profile-user.jpeg" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%;">
+    </a>
+</div>
+<div class="content">
+    <div class="following-container">
+        <div class="following-header">People You Follow</div>
+        <div class="following-item">
+            <img src="../images/profile1.jpeg" alt="Profile 1">
+            <span>User2</span>
         </div>
+        <div class="following-item">
+            <img src="../images/profile2.jpeg" alt="Profile 2">
+            <span>User3</span>
+        </div>
+        <!-- Repeat for other followed users -->
     </div>
-    <div class="feed-item">
-        <a href="feed2.html"><img src="../images/uno.jpeg" alt="Uno Club"></a>
-        <button class="caption">Uno Club <span class="material-symbols-outlined">favorite</span></button>
-        <div class="comments">
-            <h3>Comments</h3>
-            <ul>
-                <li>User 13: Magnificent!</li>
-                <li>User 14: Wonderful!</li>
-                <li>User 15: Spectacular!</li>
-            </ul>
+    <div class="scrollable-content">
+        <div class="date-display">
+            <button id="publicFeed">Public Feed</button>
+            <span id="currentDate">May 25, 2024 - Saturday</span>
+            <button id="privateFeed">Private Feed</button>
         </div>
+        <div class="feed-container" id="feed-container">
+            <!-- Feed items will be appended here by JavaScript -->
+        </div>
+        <form id="feed-form">
+            <textarea id="feed-content" placeholder="Write your feed..." class="form-control"></textarea>
+            <button type="submit" class="btn btn-primary mt-2">Post</button>
+        </form>
     </div>
-    <div class="feed-item">
-        <a href="feed3.html"><img src="../images/garden.jpeg" alt="Garden Club"></a>
-        <button class="caption">Garden Club <span class="material-symbols-outlined">favorite</span></button>
-        <div class="comments">
-            <h3>Comments</h3>
-            <ul>
-                <li>User 16: Excellent!</li>
-                <li>User 17: Beautiful work!</li>
-                <li>User 18: Bravo!</li>
-            </ul>
-        </div>
+    <div class="nav-button" id="previousDay">
+        <span class="material-symbols-outlined">chevron_left</span>
+        <span>Previous day</span>
+    </div>
+    <div class="nav-button" id="nextDay">
+        <span>Next day</span>
+        <span class="material-symbols-outlined">chevron_right</span>
     </div>
 </div>
 
-<div class="full-screen-image">
-    <img src="../images/Lacrosse.jpeg" alt="Full Screen Image">
-    <button class="caption">Women's Lacrosse Club <span class="material-symbols-outlined">favorite</span></button>
-    <div class="comments">
-        <h3>Comments</h3>
-        <ul>
-            <li>User 16: Excellent!</li>
-            <li>User 17: Beautiful work!</li>
-            <li>User 18: Bravo!</li>
-        </ul>
-    </div>
-</div>
-<div class="full-screen-image">
-    <img src="../images/Minecraft.jpeg" alt="Full Screen Image">
-    <button class="caption">Minecraft Club <span class="material-symbols-outlined">favorite</span></button>
-    <div class="comments">
-        <h3>Comments</h3>
-        <ul>
-            <li>User 16: Excellent!</li>
-            <li>User 17: Beautiful work!</li>
-            <li>User 18: Bravo!</li>
-        </ul>
-    </div>
-</div>
-<div class="full-screen-image">
-    <img src="../images/Lacrosse.jpeg" alt="Full Screen Image">
-    <button class="caption">Women's Lacrosse Club <span class="material-symbols-outlined">favorite</span></button>
-    <div class="comments">
-        <h3>Comments</h3>
-        <ul>
-            <li>User 16: Excellent!</li>
-            <li>User 17: Beautiful work!</li>
-            <li>User 18: Bravo!</li>
-        </ul>
-    </div>
-</div>
-<div class="full-screen-image">
-    <img src="../images/Minecraft.jpeg" alt="Full Screen Image">
-    <button class="caption">Minecraft Club <span class="material-symbols-outlined">favorite</span></button>
-    <div class="comments">
-        <h3>Comments</h3>
-        <ul>
-            <li>User 16: Excellent!</li>
-            <li>User 17: Beautiful work!</li>
-            <li>User 18: Bravo!</li>
-        </ul>
-    </div>
-</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const feedContainer = document.getElementById('feed-container');
+        const feedForm = document.getElementById('feed-form');
+        const feedContent = document.getElementById('feed-content');
 
+        // Fetch and display feeds
+        fetch('/api/feeds')
+            .then(response => response.json())
+            .then(feeds => {
+                feeds.forEach(feed => {
+                    const feedElement = document.createElement('div');
+                    feedElement.classList.add('feed-item');
+                    feedElement.innerHTML = `
+                        <div class="feed-item-header">
+                            <span class="username">${feed.username}</span>
+                            <span class="time-since">${feed.timeSince}</span>
+                            <span class="material-symbols-outlined dot-menu">more_vert</span>
+                        </div>
+                        <img src="${feed.imageUrl}" alt="Feed Image">
+                        <div class="caption">
+                            ${feed.content}
+                            <div class="icons">
+                                <span class="material-symbols-outlined unfavorite heart-icon">favorite</span>
+                                <span class="material-symbols-outlined chat-icon">chat_bubble_outline</span>
+                            </div>
+                        </div>
+                        <div class="comments">
+                            <h3>Comments</h3>
+                            <ul>
+                                ${feed.comments.map(comment => `<li>${comment}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="options-popup">
+                            <button>Report</button>
+                            <button>Unfollow</button>
+                            <button>Add to Favorites</button>
+                            <button>Go to post</button>
+                            <button>Cancel</button>
+                        </div>
+                    `;
+                    feedContainer.appendChild(feedElement);
+                });
+            });
+
+        // Post new feed
+        feedForm.addEventListener('submit', event => {
+            event.preventDefault();
+            const content = feedContent.value;
+            fetch('/api/feeds', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content })
+            })
+                .then(response => response.json())
+                .then(feed => {
+                    const feedElement = document.createElement('div');
+                    feedElement.classList.add('feed-item');
+                    feedElement.innerHTML = `
+                        <div class="feed-item-header">
+                            <span class="username">${feed.username}</span>
+                            <span class="time-since">${feed.timeSince}</span>
+                            <span class="material-symbols-outlined dot-menu">more_vert</span>
+                        </div>
+                        <img src="${feed.imageUrl}" alt="Feed Image">
+                        <div class="caption">
+                            ${feed.content}
+                            <div class="icons">
+                                <span class="material-symbols-outlined unfavorite heart-icon">favorite</span>
+                                <span class="material-symbols-outlined chat-icon">chat_bubble_outline</span>
+                            </div>
+                        </div>
+                        <div class="comments">
+                            <h3>Comments</h3>
+                            <ul>
+                                ${feed.comments.map(comment => `<li>${comment}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="options-popup">
+                            <button>Report</button>
+                            <button>Unfollow</button>
+                            <button>Add to Favorites</button>
+                            <button>Go to post</button>
+                            <button>Cancel</button>
+                        </div>
+                    `;
+                    feedContainer.prepend(feedElement);
+                });
+        });
+
+        // Date navigation
+        let currentDate = new Date();
+        updateDateDisplay();
+
+        document.getElementById('previousDay').addEventListener('click', function() {
+            currentDate.setDate(currentDate.getDate() - 1);
+            updateDateDisplay();
+        });
+
+        document.getElementById('nextDay').addEventListener('click', function() {
+            currentDate.setDate(currentDate.getDate() + 1);
+            updateDateDisplay();
+        });
+
+        function updateDateDisplay() {
+            let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            let formattedDate = currentDate.toLocaleDateString('en-US', options);
+            document.getElementById('currentDate').innerText = formattedDate;
+        }
+
+        // Feed buttons (public/private)
+        document.getElementById('publicFeed').addEventListener('click', function() {
+            // Load public feed
+        });
+
+        document.getElementById('privateFeed').addEventListener('click', function() {
+            // Load private feed
+        });
+
+        // Toggle options popup
+        document.querySelectorAll('.dot-menu').forEach(dotMenu => {
+            dotMenu.addEventListener('click', function() {
+                const optionsPopup = this.closest('.feed-item').querySelector('.options-popup');
+                optionsPopup.style.display = optionsPopup.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+
+        // Toggle comments
+        document.querySelectorAll('.chat-icon').forEach(chatIcon => {
+            chatIcon.addEventListener('click', function() {
+                const comments = this.closest('.feed-item').querySelector('.comments');
+                comments.style.display = comments.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+
+        // Toggle favorite
+        document.querySelectorAll('.heart-icon').forEach(heartIcon => {
+            heartIcon.addEventListener('click', function() {
+                if (this.classList.contains('unfavorite')) {
+                    this.classList.remove('unfavorite');
+                    this.classList.add('favorite');
+                } else {
+                    this.classList.remove('favorite');
+                    this.classList.add('unfavorite');
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
