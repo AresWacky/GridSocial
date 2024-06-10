@@ -1,4 +1,4 @@
-package com.gridsocial.config;
+package com.gridsocial.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

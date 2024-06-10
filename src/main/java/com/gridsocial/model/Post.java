@@ -10,8 +10,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "feeds")
-public class Feed {
+@Table(name = "post")
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +25,7 @@ public class Feed {
 
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "feedId")
+    @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
 //    @OneToMany(mappedBy = "")

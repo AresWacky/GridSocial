@@ -7,19 +7,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "comments")
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-
     private Long id;
 
     private String content;
 
     @ManyToOne
-    private Feed feedId; // ID of the feed this comment is associated with
-    // other fields as needed
+    @JoinColumn(name = "post_id")
+    private Post post; // ID of the post this comment is associated with
+
 
 }

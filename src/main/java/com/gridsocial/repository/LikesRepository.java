@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface LikesRepository extends JpaRepository<Likes, Long> {
     List<Likes> findByUserId(Long userId);
-    List<Likes> findByFeedId(Long feedId);
+    List<Likes> findByPostId(Long postId);
     List<Likes> findByCommentId(Long commentId);
 }

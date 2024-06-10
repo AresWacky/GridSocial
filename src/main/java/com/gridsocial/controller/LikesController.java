@@ -25,9 +25,9 @@ public class LikesController {
         return likeRepository.findByUserId(userId);
     }
 
-    @GetMapping("/feed/{feedId}")
-    public List<Likes> getLikesByFeed(@PathVariable Long feedId) {
-        return likeRepository.findByFeedId(feedId);
+    @GetMapping("/post/{postId}")
+    public List<Likes> getLikesByPost(@PathVariable Long postId) {
+        return likeRepository.findByPostId(postId);
     }
 
     @GetMapping("/comment/{commentId}")

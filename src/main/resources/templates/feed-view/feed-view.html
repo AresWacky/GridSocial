@@ -68,14 +68,14 @@
             cursor: pointer;
             font-weight: bold;
         }
-        .feed-container {
+        .post-container {
             display: flex;
             flex-direction: column;
             gap: 20px;
             padding: 15px;
             margin: 10px; /* Add margin */
         }
-        .feed-item {
+        .post-item {
             border-bottom: 1px solid #e1e8ed;
             padding-bottom: 15px;
             margin-bottom: 15px;
@@ -85,20 +85,20 @@
             position: relative;
             padding: 15px; /* Add padding */
         }
-        .feed-item-header {
+        .post-item-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px;
         }
-        .feed-item-header .username {
+        .post-item-header .username {
             font-weight: bold;
         }
-        .feed-item img {
+        .post-item img {
             width: 100%;
             border-radius: 20px;
         }
-        .feed-item .caption {
+        .post-item .caption {
             font-weight: bold;
             margin-top: 10px;
             font-size: 16px;
@@ -107,7 +107,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        .feed-item .caption .icons {
+        .post-item .caption .icons {
             display: flex;
             gap: 10px;
         }
@@ -279,7 +279,7 @@
             <span id="currentDate">May 25, 2024 - Saturday</span>
             <button id="privateFeed">Private Feed</button>
         </div>
-        <div class="feed-container" id="feed-container">
+        <div class="post-container" id="post-container">
             <!-- Feed items will be appended here -->
         </div>
     </div>
@@ -306,7 +306,7 @@
     </div>
 </div>
 
-<!-- Form for creating new feed -->
+<!-- Form for creating new post -->
 <form id="feedForm">
     <input type="text" id="feedContent" placeholder="What's happening?">
     <button type="submit">Post</button>
@@ -316,25 +316,25 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // Fetch and display feeds
-        const feedContainer = document.getElementById('feed-container');
+        const feedContainer = document.getElementById('post-container');
         const feedForm = document.getElementById('feedForm');
         const feedContent = document.getElementById('feedContent');
 
         fetch('/api/feeds')
             .then(response => response.json())
             .then(feeds => {
-                feeds.forEach(feed => {
+                feeds.forEach(post => {
                     const feedElement = document.createElement('div');
-                    feedElement.classList.add('feed-item');
+                    feedElement.classList.add('post-item');
                     feedElement.innerHTML = `
-                        <div class="feed-item-header">
-                            <span class="username">${feed.username}</span>
-                            <span class="time-since">${feed.timeSince}</span>
+                        <div class="post-item-header">
+                            <span class="username">${post.username}</span>
+                            <span class="time-since">${post.timeSince}</span>
                             <span class="material-symbols-outlined dot-menu">more_vert</span>
                         </div>
-                        <img src="${feed.imageUrl}" alt="Feed Image">
+                        <img src="${post.imageUrl}" alt="Feed Image">
                         <div class="caption">
-                            ${feed.content}
+                            ${post.content}
                             <div class="icons">
                                 <span class="material-symbols-outlined unfavorite heart-icon">favorite</span>
                                 <span class="material-symbols-outlined chat-icon">chat_bubble_outline</span>
@@ -343,7 +343,7 @@
                         <div class="comments">
                             <h3>Comments</h3>
                             <ul>
-                                ${feed.comments.map(comment => `<li>${comment}</li>`).join('')}
+                                ${post.comments.map(comment => `<li>${comment}</li>`).join('')}
                             </ul>
                         </div>
                         <div class="options-popup">
@@ -358,10 +358,10 @@
                 });
             });
 
-        // Post new feed
+        // Post new post
         feedForm.addEventListener('submit', event => {
             event.preventDefault(); // Prevent the default form submission
-            const content = feedContent.value; // Get the content of the feed
+            const content = feedContent.value; // Get the content of the post
             fetch('/api/feeds', {
                 method: 'POST',
                 headers: {
@@ -370,19 +370,19 @@
                 body: JSON.stringify({ content }) // Send the content to the server
             })
                 .then(response => response.json())
-                .then(feed => {
-                    // Create a new feed item element for the posted feed
+                .then(post => {
+                    // Create a new post item element for the posted post
                     const feedElement = document.createElement('div');
-                    feedElement.classList.add('feed-item');
+                    feedElement.classList.add('post-item');
                     feedElement.innerHTML = `
-                        <div class="feed-item-header">
-                            <span class="username">${feed.username}</span>
-                            <span class="time-since">${feed.timeSince}</span>
+                        <div class="post-item-header">
+                            <span class="username">${post.username}</span>
+                            <span class="time-since">${post.timeSince}</span>
                             <span class="material-symbols-outlined dot-menu">more_vert</span>
                         </div>
-                        <img src="${feed.imageUrl}" alt="Feed Image">
+                        <img src="${post.imageUrl}" alt="Feed Image">
                         <div class="caption">
-                            ${feed.content}
+                            ${post.content}
                             <div class="icons">
                                 <span class="material-symbols-outlined unfavorite heart-icon">favorite</span>
                                 <span class="material-symbols-outlined chat-icon">chat_bubble_outline</span>
@@ -391,7 +391,7 @@
                         <div class="comments">
                             <h3>Comments</h3>
                             <ul>
-                                ${feed.comments.map(comment => `<li>${comment}</li>`).join('')}
+                                ${post.comments.map(comment => `<li>${comment}</li>`).join('')}
                             </ul>
                         </div>
                         <div class="options-popup">
@@ -428,17 +428,17 @@
 
         // Feed buttons (public/private)
         document.getElementById('publicFeed').addEventListener('click', function() {
-            // Load public feed
+            // Load public post
         });
 
         document.getElementById('privateFeed').addEventListener('click', function() {
-            // Load private feed
+            // Load private post
         });
 
         // Toggle options popup
         document.querySelectorAll('.dot-menu').forEach(dotMenu => {
             dotMenu.addEventListener('click', function() {
-                const optionsPopup = this.closest('.feed-item').querySelector('.options-popup');
+                const optionsPopup = this.closest('.post-item').querySelector('.options-popup');
                 optionsPopup.style.display = optionsPopup.style.display === 'none' ? 'block' : 'none'; // Toggle display
             });
         });
@@ -446,7 +446,7 @@
         // Toggle comments
         document.querySelectorAll('.chat-icon').forEach(chatIcon => {
             chatIcon.addEventListener('click', function() {
-                const comments = this.closest('.feed-item').querySelector('.comments');
+                const comments = this.closest('.post-item').querySelector('.comments');
                 comments.style.display = comments.style.display === 'none' ? 'block' : 'none'; // Toggle display
             });
         });

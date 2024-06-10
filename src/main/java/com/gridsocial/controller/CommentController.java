@@ -34,9 +34,9 @@ public class CommentController {
         }
     }
 
-    @GetMapping("/feed/{feedId}")
-    public List<Comment> getCommentsByFeedId(@PathVariable Long feedId) {
-        return commentService.getCommentsByFeedId(feedId);
+    @GetMapping("/post/{postId}")
+    public List<Comment> getCommentsByPostId(@PathVariable Long postId) {
+        return commentService.getCommentsByPostId(postId);
     }
 
     @PostMapping

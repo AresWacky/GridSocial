@@ -34,7 +34,7 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public List<Comment> getCommentsByFeedId(long feedId) {
-        return commentRepository.findByFeedId(feedId);
+    public List<Comment> getCommentsByPostId(long postId) {
+        return commentRepository.findByPostId(postId);
     }
 }

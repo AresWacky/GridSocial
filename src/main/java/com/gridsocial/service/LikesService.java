@@ -26,8 +26,8 @@ public class LikesService {
         return likesRepository.findByUserId(userId);
     }
 
-    public List<Likes> getLikesByFeedId(Long feedId) {
-        return likesRepository.findByFeedId(feedId);
+    public List<Likes> getLikesByPostId(Long postId) {
+        return likesRepository.findByPostId(postId);
     }
 
     public List<Likes> getLikesByCommentId(Long commentId) {
