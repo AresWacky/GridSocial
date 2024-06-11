@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="webtest" />
-        <module name="test.adim" />
       </profile>
     </annotationProcessing>
   </component>

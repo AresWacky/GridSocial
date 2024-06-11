@@ -1,0 +1,143 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    display: flex;
+    background-color: #333;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+.navbar a {
+    flex: 1;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    color: white;
+    background-color: #333;
+    transition: background-color 0.3s;
+}
+.navbar a:hover {
+    background-color: #575757;
+}
+.navbar a.active, .navbar a:target {
+    background-color: #4CAF50; /* Highlight color for active tab */
+    color: white;
+}
+
+
+
+.table-container {
+    padding: 20px;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+    table-layout: fixed; /* Ensures the table columns are of fixed width */
+}
+
+table thead tr {
+    background-color: #333;
+    color: white;
+    text-align: left;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    word-wrap: break-word; /* Ensures long words break to the next line */
+    overflow-wrap: break-word; /* Alternative property to ensure text wraps */
+}
+
+table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+table tbody tr:last-of-type {
+    border-bottom: 2px solid #333;
+}
+
+table button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+table button:hover {
+    background-color: #45a049;
+}
+.ban-dropdown {
+    padding: 5px;
+    margin-left: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color:#4CAF50 ;
+    color: white;
+}
+
+/*make sure total is to the right of reports*/
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-container h1 {
+    margin: 0;
+}
+
+.header-container .total-number {
+    font-size: 1.2em;
+
+} .button-container {
+      margin-bottom: 10px;
+  }
+
+.button-container button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.button-container button:hover {
+    background-color: #45a049;
+}
+
+.details-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.details-content {
+    flex: 1 0 100%;
+    margin: 10px 0;
+}
+
+.details-content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.details-content table th, .details-content table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}

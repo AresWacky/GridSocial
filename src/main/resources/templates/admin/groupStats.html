@@ -1,64 +1,39 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Group Statistics</title>
-    <link rel="stylesheet" href="admin.css">
-
+  <meta charset="UTF-8">
+  <title>Group Stats</title>
+ <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
+<!--Main nav bar-->
 <div class="navbar">
-    <a href="all.html">Reports</a>
-    <a href="Requests.html">Requests</a>
-    <a href="stats.html" class="active">Statistics</a>
+  <a href="Report.html" th:href="@{/report/all}">Reports</a>
+  <a href="Requests.html" th:href="@{/groupRequest/all}">Requests</a>
+  <a href="Stats.html" class="active" th:href="@{/stats/all}">Statistics</a>
 </div>
+<!--Title and total-->
 <div id="reports" class="content">
-    <div class="header-container">
-        <h1>Group Statistics</h1>
-        <span class="total-number">Total:7 </span>
-    </div>
+  <div class="header-container">
+    <h1>Group Statistics</h1>
+    <span class="total-number"><span th:text="${groupCount}" ></span></span>
+  </div>
 
 
-    <table>
-        <thead>
-        <tr>
-            <th>Groups</th>
-            <th>Members</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>Intramural Soccer</td>
-            <td>17</td>
-        </tr>
-        <tr>
-            <td>Uno Club</td>
-            <td>12</td>
-        </tr>
-        <tr>
-            <td>Women's Lacrosse club</td>
-            <td>23</td>
-        </tr>
-        <tr>
-            <td>Garden Club</td>
-            <td>16</td>
-        </tr>
-        <tr>
-            <td>Robotics</td>
-            <td>7</td>
-        </tr>
-        <tr>
-            <td>Minecraft Club</td>
-            <td>14
-        </tr>
-        <tr>
-            <td>The Worker's Union</td>
-            <td>50</td>
-        </tr>
-        </tbody>
-    </table>
+  <table>
+    <thead>
+    <tr>
+      <th>Group</th>
+      <th>Member Count</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="group : ${groupList}">
+      <td th:text="${group.name}"></td>
+      <td th:text="${group.members.size()}"></td>
+    </tr>
+    </tbody>
+  </table>
 </div>
-
 </body>
 </html>
