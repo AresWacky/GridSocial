@@ -5,7 +5,6 @@ import com.gridsocial.service.UserService;
 import com.gridsocial.model.Comment;
 import com.gridsocial.service.CommentService;
 import com.gridsocial.model.Group;
-import com.gridsocial.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +24,8 @@ public class AdminController {
     @Autowired
     private CommentService commentService;
 
-    @Autowired
-    private GroupService groupService;
+//    @Autowired
+//    private GroupService groupService;
 
     //methods that handle user access
 
@@ -80,12 +79,12 @@ public class AdminController {
 
 
     //Methods for groups
-    @GetMapping("/groups")
-    public String getAllGroups(Model model) {
-        List<Group> groups = groupService.getAllGroups();
-        model.addAttribute("groups", groups);
-        return "allGroups";
-    }
+//    @GetMapping("/groups")
+//    public String getAllGroups(Model model) {
+//        List<Group> groups = groupService.getAllGroups();
+//        model.addAttribute("groups", groups);
+//        return "allGroups";
+//    }
 
 
 
@@ -96,14 +95,14 @@ public class AdminController {
 
 
     //count groups and users
-    @GetMapping("/stats/all")
-    public String getUsageStatistics(Model model) {
-        long userCount = userService.getUserCount();
-        long groupCount = groupService.countGroups();
-        Map<String, Object> statistics = new HashMap<>();
-        statistics.put("userCount", userCount);
-        statistics.put("groupCount", groupCount);
-        model.addAttribute("statistics", statistics);
-        return "admin/Stats";
-    }
+//    @GetMapping("/stats/all")
+//    public String getUsageStatistics(Model model) {
+//        long userCount = userService.getUserCount();
+//        long groupCount = groupService.countGroups();
+//        Map<String, Object> statistics = new HashMap<>();
+//        statistics.put("userCount", userCount);
+//        statistics.put("groupCount", groupCount);
+//        model.addAttribute("statistics", statistics);
+//        return "admin/Stats";
+//    }
 }

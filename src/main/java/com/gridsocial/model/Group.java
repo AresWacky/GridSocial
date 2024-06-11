@@ -24,21 +24,21 @@ public class Group {
     private String name;
 
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<User> members = new HashSet<>();
-
-
-
-    public void addMember(User user) {
-        this.members.add(user);
-    }
-
-    public void removeMember(User user) {
-        this.members.remove(user);
-    }
-
-    public void removeMember(Long userId) {
-        this.members.removeIf(user -> user.getId().equals(userId));
-    }
+//    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<User> members = new HashSet<>();
+//
+//
+//
+//    public void addMember(User user) {
+//        this.members.add(user);
+//    }
+//
+//    public void removeMember(User user) {
+//        this.members.remove(user);
+//    }
+//
+//    public void removeMember(Long userId) {
+//        this.members.removeIf(user -> user.getId().equals(userId));
+//    }
 }
 

@@ -45,11 +45,6 @@ public class User implements UserDetails {
     private Role role;
 
 
-
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    private com.gridsocial.model.Group group;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
