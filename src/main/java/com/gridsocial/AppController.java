@@ -15,16 +15,10 @@ import java.util.Optional;
 @Controller
 public class AppController {
 
-    @GetMapping({"" ,"/", "/home", "/index"})
-    public String home() {
-        return "redirect:/login";
-    }
-
     @GetMapping("/login")
     public String login() {
         return "/home/login-page";
     }
-
 
     private final UserService userService;
 
