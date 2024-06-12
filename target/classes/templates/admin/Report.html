@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reports</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<!--main nav bar-->
+<div class="navbar">
+    <a class="active" href="Report.html" th:href="@{/report/all}">Reports</a>
+    <a href="Requests.html" th:href="@{/groupRequest/all}">Requests</a>
+    <a href="Stats.html" th:href="@{/stats/all}">Statistics</a>
+</div>
+<h1>Reports</h1>
+<form method="get" th:action="@{/filter}">
+    <label for="filter">Filter:</label>
+    <select name="targetType" id="filter">
+        <option value="">All</option>
+        <option value="PERSON" th:selected="${selectedFilter == 'PERSON'}">Person</option>
+        <option value="GROUP" th:selected="${selectedFilter == 'GROUP'}">Group</option>
+        <option value="COMMENT" th:selected="${selectedFilter == 'COMMENT'}">Comment</option>
+    </select>
+    <button type="submit">Apply Filter</button>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Target Type</th>
+        <th>Reason</th>
+        <th>Reported By</th>
+        <th>Target ID</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="report : ${reportList}">
+        <td th:text="${report.date}"></td>
+        <td th:text="${report.targetType}"></td>
+        <td th:text="${report.reason}"></td>
+        <td th:text="${report.reportedBy}"></td>
+        <td th:text="${report.targetId}"></td>
+        <td>
+            <form method="post" th:action="@{/report/action/{id}(id=${report.id})}">
+                <button type="submit" name="action" value="DELETE">Delete</button>
+                <button type="submit" name="action" value="IGNORE">Ignore</button>
+                <button type="submit" name="action" value="BAN">Ban</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

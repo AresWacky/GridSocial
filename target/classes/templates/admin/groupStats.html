@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Group Stats</title>
+ <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<!--Main nav bar-->
+<div class="navbar">
+  <a href="Report.html" th:href="@{/report/all}">Reports</a>
+  <a href="Requests.html" th:href="@{/groupRequest/all}">Requests</a>
+  <a href="Stats.html" class="active" th:href="@{/stats/all}">Statistics</a>
+</div>
+<!--Title and total-->
+<div id="reports" class="content">
+  <div class="header-container">
+    <h1>Group Statistics</h1>
+    <span class="total-number"><span th:text="${groupCount}" ></span></span>
+  </div>
+
+
+  <table>
+    <thead>
+    <tr>
+      <th>Group</th>
+      <th>Member Count</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="group : ${groupList}">
+      <td th:text="${group.name}"></td>
+      <td th:text="${group.members.size()}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

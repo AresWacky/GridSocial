@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Personal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        body {
+            height: calc(100vh - 56px);
+            background-color: #2B1C2FFF;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #c7c7c7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #9d9d9d;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #212529;
+        }
+
+        .navbar {
+            box-shadow: 1px 6px 10px 4px rgba(0, 0, 0, 0.27);
+            z-index: 3;
+        }
+
+        .calendar-control {
+            position: fixed;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+            border-radius: 10px;
+            transition: opacity 0.3s ease;
+            opacity: 0.75;
+        }
+
+        .calendar-control:hover {
+            opacity: 1;
+        }
+
+        #vertical-slider-container {
+            height: calc((100vh - 76px) / 2);
+            display: flex;
+            z-index: 10;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #9d9d9d;
+            transition: opacity 0.3s ease;
+            opacity: 0.65;
+        }
+
+        #vertical-slider-container:hover {
+            opacity: 1;
+        }
+
+        button.arrow-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px; /* Adjusted width for better spacing */
+            height: 36px; /* Adjusted height for better spacing */
+            border-radius: 10px;
+            border: 1px solid #9d9d9d;
+            background-color: #343a40; /* Dark background color */
+            color: white;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            opacity: 0.65;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        button.arrow-btn:hover {
+            opacity: 1 !important;
+        }
+
+        input[type=range][orient=vertical] {
+            writing-mode: bt-lr; /* IE */
+            -webkit-appearance: slider-vertical; /* WebKit */
+            width: 0;
+            height: 100%;
+            padding: 0 10px;
+        }
+
+        .main-content {
+            display: flex;
+            overflow-y: hidden;
+            height: calc(100vh - 56px);
+            padding-bottom: 20px;
+            padding-right: 49px;
+            background: linear-gradient(to right, rgb(43,28,47), rgb(20,63,70));
+        }
+
+
+        .column {
+            position: relative;
+            height: calc(100vh - 74px);
+            box-sizing: border-box;
+            flex: 2 0 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .day-box {
+            background-color: #808080;
+            border: 1px solid #9d9d9d;
+            border-top: none; /* remove the top border */
+            text-align: center;
+            margin-left: 2px;
+            margin-right: 2px;
+            margin-bottom: 2px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            border-top-left-radius: 0; /* no rounded edge on the top left corner */
+            border-top-right-radius: 0; /* no rounded edge on the top right corner */
+            box-shadow: 1px 4px 5px 4px rgba(0, 0, 0, 0.27);
+
+        }
+
+        .day-box:hover {
+            border-color: #ffffff;
+            overflow-y: auto;
+        }
+
+        .current-week {
+            height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .list-group-item {
+            height: 70px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .day-box .list-group {
+            overflow-y: auto;
+        }
+
+        .leftover-week {
+            height: 20vh;
+            position: relative;
+            z-index: 1;
+            margin-top: -14px;
+        }
+
+        @media (max-height: 600px) {
+            .leftover-week {
+                display: none;
+            }
+            .expand-btn {
+                display: none;
+            }
+            #vertical-slider-container {
+                display: none;
+            }
+
+        }
+
+        .expand-btn {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #212529;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-body {
+            margin: 0;
+            background-color: #ffffff;
+            padding: 0;
+            overflow-y: hidden;
+        }
+
+        .day-box:hover .card-body {
+            overflow-y: auto;
+        }
+
+        .card-footer {
+            position: sticky;
+            background-color: rgba(255, 255, 255, 0.5);
+            color: white;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+        .day-box:hover .card-footer {
+            opacity: 1;
+        }
+        .card:hover .expand-btn {
+            opacity: 1;
+        }
+
+        .expanded {
+            height: calc(100vh - 75px);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            transition: all 0s ease;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            position: fixed;
+            top: 56px; /* below navbar */
+            left: 0;
+            height: calc(100vh - 56px);
+            width: 0;
+            background-color: #343a40;
+            overflow: hidden;
+            z-index: 0;
+            display: none; /* Initially hidden */
+            transition: width 0.3s ease;
+        }
+
+        .sidebar .resize-handle {
+            width: 10px;
+            height: 100%;
+            background-color: #9D9D9DFF;
+            cursor: ew-resize;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        /* Remove transition when resizing the sidebar */
+        .sidebar-resizing .sidebar,
+        .sidebar-resizing #mainContent {
+            transition: none;
+        }
+
+
+        .sidebar-open .sidebar {
+            width: 30vw; /* Initial width when sidebar is open */
+        }
+
+        .btn-group .btn {
+            border-radius: 0;
+        }
+
+        #mainContent {
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-dark bg-dark" style="height: 56px">
+    <div class="container-fluid">
+        <div>
+        <button class="navbar-toggler" type="button" id="toggleSidebar">
+            <i class="bi-people-fill"> Friends</i>
+        </button>
+        </div>
+
+        <div class="d-flex">
+            <a class="nav-link active bg-dark text-white" style="font-size:22px" aria-current="page" href="#"><b>Personal</b></a>
+            <span class="border-right my-auto mx-2 text-white">
+                <div class="vertical-line text-white-50"
+                     style="border-left: 1px solid ;
+                            height: 25px;
+                            margin: 0 10px; ">
+                </div>
+            </span>
+            <a class="nav-link bg-dark text-white-50" style="font-size:22px;" aria-current="page" href="#">Feed</a>
+        </div>
+
+        <button class="navbar-toggler dropdown" role="button" href="#">
+            <i>Profile</i> <i class="bi-person-circle"></i>
+        </button>
+    </div>
+
+</nav>
+
+<div id="sidebar" class="sidebar" style="">
+        <div class="btn-group btn-group-toggle d-flex gx" data-toggle="buttons" style="margin-right: 10px;">
+            <label class="btn btn-secondary active">Friends</label>
+            <label class="btn btn-secondary">Groups</label>
+        </div>
+    <table class="table table-dark table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row"></th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+        </tr>
+    </table>
+    <div class="resize-handle"></div>
+</div>
+
+<div class="calendar-control" style="margin-bottom: 10px">
+    <button id="up-arrow" class="arrow-btn bg-dark"><i class="bi bi-chevron-up"></i></button>
+
+    <div id="vertical-slider-container" class="bg-dark">
+
+     <input type="range" id="vertical-slider" orient="vertical" min="0" max="2" step="1">
+
+    </div>
+    <button id="down-arrow" class="arrow-btn bg-dark"><i class="bi bi-chevron-down"></i></button>
+
+</div>
+
+<div id="mainContent" class="container-fluid main-content">
+    <!-- MONDAY -->
+    <div class="column">
+<!--        <div class="card bg-dark text-white day-box leftover-week rounded-bottom-4">-->
+<!--            <div style="margin-top: 14px">Last-last Week</div>-->
+<!--        </div>-->
+<!--        <div class="card bg-dark text-white day-box leftover-week rounded-bottom-4" style="z-index: 0">-->
+<!--            <div style="margin-top: 14px">Last Week</div>-->
+<!--        </div>-->
+        <div class="card bg-dark text-white day-box current-week rounded-bottom-4">
+            <div class="card-header">
+                Monday
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush list-group-item-dark" id="mondayList">
+                    <!-- List items will be added here dynamically -->
+                </ul>
+            </div>
+            <div class="card-footer" onclick="expandCard(this)">
+                <div class="expand-btn text-white"></div>
+            </div>
+        </div>
+        <div class="card bg-dark text-white day-box leftover-week rounded-bottom-4">
+            <div style="margin-top: 14px">Next Week</div>
+        </div>
+        <div class="card bg-dark text-white day-box leftover-week rounded-bottom-4" style="z-index: 0">
+            <div style="margin-top: 14px">Next-next Week</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function createListItems(listId, numItems) {
+        const list = document.getElementById(listId);
+        for (let i = 0; i < numItems; i++) {
+            const listItem = document.createElement('li');
+            listItem.className = 'list-group-item';
+            list.appendChild(listItem);
+        }
+    }
+
+    createListItems('mondayList', 24);
+
+    function expandCard(button) {
+        const currentCard = button.closest('.current-week');
+        const isExpanded = currentCard.classList.contains('expanded');
+
+        document.querySelectorAll('.current-week.expanded').forEach(card => {
+            card.classList.remove('expanded');
+        });
+
+        if (!isExpanded) {
+            currentCard.classList.add('expanded');
+        }
+    }
+
+    const firstColumn = document.querySelector('.column');
+    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+    for (let i = 1; i < 7; i++) {
+        const clone = firstColumn.cloneNode(true);
+        firstColumn.parentNode.appendChild(clone);
+        clone.querySelector('.card-header').textContent = daysOfWeek[i];
+        clone.querySelector('.list-group').id = `${daysOfWeek[i].toLowerCase()}List${i}`;
+    }
+
+    document.getElementById('toggleSidebar').addEventListener('click', function() {
+        document.body.classList.toggle('sidebar-open');
+        if (document.body.classList.contains('sidebar-open')) {
+            sidebar.style.display = 'block'; // Show the sidebar
+            sidebar.style.width = '15vw';
+            mainContent.style.marginLeft = '15vw'; // Shift main content
+            mainContent.style.width = '85vw';
+        } else {
+            sidebar.style.display = 'none'; // Hide the sidebar
+            mainContent.style.marginLeft = '0'; // Reset main content position
+            mainContent.style.width = '100vw'; //Reset calendar width
+        }
+    });
+
+    let isResizing = false;
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const handle = document.querySelector('.resize-handle');
+
+    handle.addEventListener('mousedown', function(e) {
+        isResizing = true;
+        document.body.style.cursor = 'ew-resize';
+        document.body.classList.add('no-select');
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (!isResizing) return;
+        document.body.classList.add('sidebar-resizing');
+        let newWidth = e.clientX / window.innerWidth * 100;
+        if (newWidth < 15) newWidth = 15; // Minimum width is 30% of the viewport width
+        if (newWidth > 45) newWidth = 45; // Maximum width is 45% of the viewport width
+        sidebar.style.width = newWidth + 'vw';
+        mainContent.style.marginLeft = newWidth + 'vw'
+        mainContent.style.width = 100 - newWidth + 'vw';
+    });
+
+    document.addEventListener('mouseup', function() {
+        isResizing = false;
+        document.body.classList.remove('sidebar-resizing');
+        document.body.style.cursor = 'default';
+        document.body.classList.remove('no-select');
+    });
+
+</script>
+</body>
+</html>
