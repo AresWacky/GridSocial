@@ -3,36 +3,38 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.navbar {
-    display: flex;
-    background-color: #333;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-}
-.navbar a {
-    flex: 1;
-    text-align: center;
-    padding: 14px 20px;
-    text-decoration: none;
-    color: white;
-    background-color: #333;
-    transition: background-color 0.3s;
-}
-.navbar a:hover {
-    background-color: #575757;
-}
-.navbar a.active, .navbar a:target {
-    background-color: #4CAF50; /* Highlight color for active tab */
-    color: white;
+.navbar-custom {
+    height: 56px;
+    background-color: #343a40; /* Ensure the bg-dark class effect */
 }
 
+.navbar-custom .navbar-toggler {
+    color: white;
+    border-color: rgba(255, 255, 255, 0.1);
+}
 
+.navbar-custom .nav-link {
+    color: white;
+    font-size: 22px;
+}
+
+.navbar-custom .nav-link.active {
+    font-weight: bold;
+}
+
+.vertical-line {
+    border-left: 1px solid white;
+    height: 25px;
+    margin: 0 10px;
+}
+
+.navbar-dark .navbar-toggler-icon {
+    background-image: none;
+}
 
 .table-container {
     padding: 20px;
 }
-
 
 table {
     width: 100%;
@@ -46,7 +48,6 @@ table {
 table thead tr {
     background-color: #333;
     color: white;
-    text-align: left;
 }
 
 table th, table td {
@@ -78,16 +79,16 @@ table button {
 table button:hover {
     background-color: #45a049;
 }
+
 .ban-dropdown {
     padding: 5px;
     margin-left: 10px;
     border-radius: 4px;
     border: 1px solid #ddd;
-    background-color:#4CAF50 ;
+    background-color: #4CAF50;
     color: white;
 }
 
-/*make sure total is to the right of reports*/
 .header-container {
     display: flex;
     justify-content: space-between;
@@ -101,10 +102,11 @@ table button:hover {
 
 .header-container .total-number {
     font-size: 1.2em;
+}
 
-} .button-container {
-      margin-bottom: 10px;
-  }
+.button-container {
+    margin-bottom: 10px;
+}
 
 .button-container button {
     padding: 8px 16px;
@@ -141,3 +143,12 @@ table button:hover {
     border: 1px solid #ddd;
     text-align: left;
 }
+
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
+
