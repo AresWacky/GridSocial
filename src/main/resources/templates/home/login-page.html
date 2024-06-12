@@ -21,15 +21,20 @@
                     <div class="mt-md-4 pb-5 px-3">
                         <h2 class="fw-bold mb-4 text-uppercase text-center">Login</h2>
                         <p class="text-white-50 mb-3 text-center">Please enter your login and password!</p>
-                        <form action="/login" method="post">
+                        <form action="/auth/authenticate" method="post">
                             <div data-mdb-input-init class="form-outline form-white mb-4">
-                                <input type="email" id="typeEmailX" name="email" class="form-control form-control-lg" required />
-                                <label class="form-label d-block text-center" for="typeEmailX">Email</label>
+                                <input type="email" id="typeEmail" name="email" class="form-control form-control-lg" required />
+                                <label class="form-label d-block text-center" for="typeEmail">Email</label>
                             </div>
                             <div data-mdb-input-init class="form-outline form-white mb-4">
-                                <input type="password" id="typePasswordX" name="password" class="form-control form-control-lg" required />
-                                <label class="form-label d-block text-center" for="typePasswordX">Password</label>
+                                <input type="password" id="typePassword" name="password" class="form-control form-control-lg" required />
+                                <label class="form-label d-block text-center" for="typePassword">Password</label>
                             </div>
+
+                            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                                <p th:text="${errorMessage}"></p>
+                            </div>
+
                             <p class="small mb-2 text-center"><a class="text-white-50" href="#!">Forgot password?</a></p>
                             <div class="d-flex justify-content-center">
                                 <button data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-light btn-lg px-5" type="submit" style="margin-top: 20px; color: #22aa99;">

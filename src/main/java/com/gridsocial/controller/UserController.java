@@ -24,7 +24,12 @@ public class UserController {
     }
 
 
-
+    @GetMapping("/{username}/personal")
+    public String personal(@PathVariable String username, Model model) {
+        //Node service get my nodes--repo.getNodesByUser return list of nodes
+        //mode.addAttributelist
+        return "/personal-view/personal-view";
+    }
 
     @GetMapping("/all")
     public String getAllUsers(Model model) {

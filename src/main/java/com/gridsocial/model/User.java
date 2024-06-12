@@ -34,8 +34,12 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String accountStatus;
+    public enum AccountStatus {
+        ACTIVE, BANNED
+    }
+
+    @Enumerated(EnumType.STRING)
+    private AccountStatus accountStatus;
 
     public enum Role {
         USER, ADMIN
@@ -44,6 +48,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String nylasAccessToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

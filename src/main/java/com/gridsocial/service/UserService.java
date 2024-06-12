@@ -40,7 +40,7 @@ public class UserService {
 
     public void banUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        user.setAccountStatus("BANNED");
+        user.setAccountStatus(User.AccountStatus.BANNED);
         userRepository.save(user);
     }
 

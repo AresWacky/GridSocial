@@ -26,8 +26,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/signup", "/login").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/signup", "/login", "/auth/**","/css/**", "nylas/auth", "nylas/callback").permitAll()
+
+                        .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
@@ -38,10 +39,5 @@ public class SecurityConfig {
         ;
         return http.build();
 
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/css/**", "/js/**", "/images/**");
     }
 }
