@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Statistics</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+</head>
+<body>
+<div class="navbar">
+    <a href="Report.html" th:href="@{/report/all}">Reports</a>
+    <a href="Requests.html" th:href="@{/groupRequest/all}">Requests</a>
+    <a href="Stats.html" class="active" th:href="@{/stats/all}">Statistics</a>
+</div>
+<div id="reports" class="content">
+    <div class="button-container">
+        <button onclick="toggleDetails()">See More</button>
+    </div>
+    <div class="details-container" style="display: none;" id="details-container">
+        <div class="details-content">
+            <table>
+                <tr>
+                    <th>Username</th>
+                    <td th:text="${userList[0].username}"></td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td th:text="${userList[0].email}"></td>
+                </tr>
+                <tr>
+                    <th>Account Status</th>
+                    <td th:text="${userList[0].accountStatus}"></td>
+                </tr>
+                <tr>
+                    <th>Role</th>
+                    <td th:text="${userList[0].role}"></td>
+                </tr>
+                <tr>
+                    <th>Password</th>
+                    <td th:text="${userList[0].password}"></td>
+                </tr>
+                <tr>
+                    <th>Group</th>
+                    <td th:text="${userList[0].group != null ? userList[0].group.name : 'No Group'}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="table-container">
+        <div class="header-container">
+            <h1>All Users</h1>
+        </div>
+        <table class="user-info-table">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Groups</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${userList}" class="user-row">
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.group != null ? user.group.name : ' '}"></td>
+                <td>
+
+                    <button onclick="toggleDetails()">See More</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script th:inline="javascript">
+
+    function toggleDetails() {
+        var detailsContainer = document.getElementById('details-container');
+        detailsContainer.style.display = detailsContainer.style.display === 'none' ? 'flex' : 'none';
+    }
+</script>
+
+</body>
+</html>

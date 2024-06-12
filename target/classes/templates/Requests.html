@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Organization</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+</head>
+<body>
+<!--Main Nav bar-->
+<div class="navbar">
+    <a href="Report.html" th:href="@{/report/all}">Reports</a>
+    <a href="Requests.html"  class="active" th:href="@{/groupRequest/all}">Requests</a>
+    <a href="Stats.html" th:href="@{/stats/all}">Statistics</a>
+</div>
+
+<div id="reports" class="content">
+    <div class="header-container">
+        <h1>Requests</h1>
+        <span class="total-number">Total: <span th:text="${groupRequests.size()}"></span></span>
+    </div>
+
+
+    <!-- Dummy data       -->
+    <table>
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Description/Reason</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="request : ${groupRequests}">
+            <td th:text="${request.date}"></td>
+            <td th:text="${request.groupName}"></td>
+            <td th:text="${request.description}"></td>
+            <td th:text="${request.status}"></td>
+            <td>
+                <form th:action="@{/groupRequest/approve/{id}(id=${request.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-success">Approve</button>
+                </form>
+                <form th:action="@{/groupRequest/deny/{id}(id=${request.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Deny</button>
+                </form>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
