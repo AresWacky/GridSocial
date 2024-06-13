@@ -15,7 +15,9 @@ The purpose of this app is to help with organizing and possibly providing some m
 
 If time is available, the inclusion of fun social features may come to light, such as theming to ways that push you to want to interact with others' calendars.
 
-(Note: There were some parts that worked during the semester when we were testing, but failed when we implemented the secuirty and Nylas API. Such as the group stuff. I (Hamza) am telling you this just so you know that everything was working at some point, but it stopped working when it really mattered and now we just have to submit what we have for the sake of submitting something and getting a grade. We all pulled our weight in this project and while it didn't turn out exactly how we would have liked, I would still say we learned a lot and did good. Thank you for all of your hard work and effort this semester!) 
+# Read This Please
+
+(Note: There were some parts that worked during the semester when we were testing, but failed when we implemented the secuirty and Nylas API. Such as the group stuff. I (Hamza) am telling you this just so you know that everything was working at some point, but it stopped working when it really mattered and now we just have to submit what we have for the sake of submitting something and getting a grade. We all pulled our weight in this project and while it didn't turn out exactly how we would have liked, I would still say we learned a lot and did good. I'm only sorry that we didn't have more to show for it. Thank you for all of your hard work and effort this semester!) 
 
 Steps to run the program (Sorry that these aren't more specific): 
 
